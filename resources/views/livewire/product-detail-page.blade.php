@@ -1,0 +1,149 @@
+<div class="w-full max-w-[85rem] py-10 px-4 sm:px-6 lg:px-8 mx-auto">
+  <section class="overflow-hidden bg-white py-11 font-poppins dark:bg-gray-800">
+    <div class="max-w-6xl px-4 py-4 mx-auto lg:py-8 md:px-6">
+      <div class="flex flex-wrap -mx-4">
+
+        {{-- Bagian Gambar Produk --}}
+        @php
+          // Ambil array gambar; jika kosong, pakai satu gambar default dari /public/images/default.png
+          $images = $products->images ?: [];
+          if (empty($images)) {
+              $images = ['images/default.png'];
+          }
+
+          // Tentukan gambar utama
+          $firstImage = $images[0] === 'images/default.png'
+              ? asset($images[0])
+              : url('storage', $images[0]);
+        @endphp
+
+        <div class="w-full mb-8 md:w-1/2 md:mb-0" x-data="{ mainImage: '{{ $firstImage }}' }">
+        <div class="sticky top-16 z-30 overflow-hidden">
+            {{-- Gambar utama --}}
+            <div class="relative mb-6 lg:mb-10 lg:h-2/4">
+              <img x-bind:src="mainImage" alt="{{ $products->name ?? 'Produk' }}"
+                   class="object-cover w-full lg:h-full"
+                   onerror="this.onerror=null;this.src='{{ asset('images/default.png') }}';">
+            </div>
+
+            {{-- Thumbnail gambar --}}
+            <div class="flex-wrap hidden md:flex">
+              @foreach ($images as $image)
+                @php
+                  $src = ($image === 'images/default.png')
+                      ? asset($image)
+                      : url('storage', $image);
+                @endphp
+
+                <div class="w-1/2 p-2 sm:w-1/4"
+                     x-on:click="mainImage='{{ $src }}'">
+                  <img src="{{ $src }}"
+                       alt="{{ $products->name ?? 'Produk' }}"
+                       class="object-cover w-full lg:h-20 cursor-pointer hover:border hover:border-blue-500 rounded"
+                       onerror="this.onerror=null;this.src='{{ asset('images/default.png') }}';">
+                </div>
+              @endforeach
+            </div>
+
+            {{-- Info tambahan --}}
+            <div class="px-6 pb-6 mt-6 border-t border-gray-300 dark:border-gray-400">
+              <div class="flex flex-wrap items-center mt-6">
+                <span class="mr-2">
+                  <svg xmlns="http://www.w3.org/2000/svg"
+                       width="16" height="16" fill="currentColor"
+                       class="w-4 h-4 text-gray-700 dark:text-gray-400 bi bi-truck"
+                       viewBox="0 0 16 16">
+                    <path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 
+                             3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 
+                             1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 
+                             1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 
+                             0H5a2 2 0 1 1-3.998-.085A1.5 
+                             1.5 0 0 1 0 10.5v-7zm1.294 
+                             7.456A1.999 1.999 0 0 1 4.732 
+                             11h5.536a2.01 2.01 0 0 1 
+                             .732-.732V3.5a.5.5 0 0 
+                             0-.5-.5h-9a.5.5 0 0 
+                             0-.5.5v7a.5.5 0 0 
+                             0 .294.456zM12 
+                             10a2 2 0 0 
+                             1 1.732 1h.768a.5.5 
+                             0 0 0 .5-.5V8.35a.5.5 
+                             0 0 0-.11-.312l-1.48-1.85A.5.5 
+                             0 0 0 13.02 6H12v4zm-9 
+                             1a1 1 0 1 0 0 2 1 1 
+                             0 0 0 0-2zm9 0a1 1 
+                             0 1 0 0 2 1 1 
+                             0 0 0 0-2z"></path>
+                  </svg>
+                </span>
+                <h2 class="text-lg font-bold text-gray-700 dark:text-gray-400">Gratis Ongkir</h2>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {{-- Bagian Detail Produk --}}
+        <div class="w-full px-4 md:w-1/2">
+          <div class="lg:pl-20">
+            {{-- Nama & Harga --}}
+            <div class="mb-8">
+              <h2 class="max-w-xl mb-6 text-2xl font-bold dark:text-gray-400 md:text-4xl">
+                {{ $products->name }}
+              </h2>
+              <p class="inline-block mb-6 text-4xl font-bold text-gray-700 dark:text-gray-400">
+                <span>{{ Number::currency($products->price, 'IDR') }}</span>
+              </p>
+              <p class="max-w-md text-gray-700 dark:text-gray-400">
+                {!! Str::markdown($products->description) !!}
+              </p>
+            </div>
+
+            {{-- Jumlah Produk --}}
+            <div class="w-32 mb-8">
+              <label class="w-full pb-1 text-xl font-semibold text-gray-700 border-b border-blue-300 dark:border-gray-600 dark:text-gray-400">
+                Jumlah
+              </label>
+              <div class="relative flex flex-row w-full h-10 mt-6 bg-transparent rounded-lg">
+                <button wire:click="decreaseQty"
+                        class="w-20 h-full text-gray-600 bg-gray-300 rounded-l outline-none cursor-pointer 
+                               dark:hover:bg-gray-700 dark:text-gray-400 hover:text-gray-700 
+                               dark:bg-gray-900 hover:bg-gray-400">
+                  <span class="m-auto text-2xl font-thin">-</span>
+                </button>
+
+                <input type="number" wire:model="quantity" readonly
+                       class="flex items-center w-full font-semibold text-center text-gray-700 
+                              placeholder-gray-700 bg-gray-300 outline-none dark:text-gray-400 
+                              dark:placeholder-gray-400 dark:bg-gray-900 focus:outline-none 
+                              text-md hover:text-black"
+                       placeholder="1">
+
+                <button wire:click="increaseQty"
+                        class="w-20 h-full text-gray-600 bg-gray-300 rounded-r outline-none cursor-pointer 
+                               dark:hover:bg-gray-700 dark:text-gray-400 dark:bg-gray-900 
+                               hover:text-gray-700 hover:bg-gray-400">
+                  <span class="m-auto text-2xl font-thin">+</span>
+                </button>
+              </div>
+            </div>
+
+            {{-- Tombol Tambah ke Keranjang --}}
+            <div class="flex flex-wrap items-center gap-4">
+              <button wire:click="addToCart({{ $products->id }})"
+                      class="w-full p-4 bg-amber-400 rounded-md lg:w-2/5 dark:text-gray-200 text-gray-50 
+                              hover:bg-amber-500 dark:bg-amber-400 dark:hover:bg-amber-600">
+                <span wire:loading.remove wire:target="addToCart({{ $products->id }})">
+                  Tambah ke Keranjang
+                </span>
+                <span wire:loading wire:target="addToCart({{ $products->id }})">
+                  Menambahkan...
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</div>
