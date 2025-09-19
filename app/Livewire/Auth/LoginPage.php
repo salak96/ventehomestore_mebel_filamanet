@@ -19,7 +19,7 @@ class LoginPage extends Component
         ]);
 
         if(!auth()->attempt(['email' => $this->email, 'password' => $this->password])){
-            session()->flash('error', 'invalid credentials');
+            session()->flash('error', 'kata sandi atau email salah');
             return;
         }
 

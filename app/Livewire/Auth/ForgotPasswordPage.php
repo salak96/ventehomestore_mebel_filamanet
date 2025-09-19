@@ -20,7 +20,7 @@ class ForgotPasswordPage extends Component
         $status = Password::sendResetLink(['email' => $this->email]);
 
         if($status === Password::RESET_LINK_SENT) {
-            session()->flash('success', 'Password Reset Link has been sent to your email address!');
+            session()->flash('success', 'Password direset link telah dikirim ke email Anda.');
             $this->email = '';
         }
     }
