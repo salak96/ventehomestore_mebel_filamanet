@@ -1,29 +1,43 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script>
-  window.deferLoadingAlpine = (alpineInit) => {
-    document.addEventListener('livewire:load', alpineInit)
-  }
-</script>
-<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <title>{{ $title ?? 'Order' }}</title>
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-        @livewireStyles
-    </head>
-    <body class="bg-slate-200 dark:bg-slate-700">
-        @livewire('partials.navbar')
-        <main>
-            {{ $slot }}
-        </main>
-        @livewire('partials.footer')
-        @livewireScripts
+    <title>{{ $title ?? 'Order' }}</title>
 
-        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <x-livewire-alert::scripts />
-      @livewireScripts
-    </body>
+    {{-- Vite assets (pastikan TIDAK meng-import Alpine lagi di app.js, pilih salah satu: CDN atau Vite) --}}
+    {{-- HEAD --}}
+@vite(['resources/css/app.css', 'resources/js/app.js']) {{-- pastikan app.js TIDAK import Alpine --}}
+@livewireStyles
+
+    @livewireStyles
+
+    {{-- Alpine: CDN sekali saja + guard agar sinkron dengan Livewire & tidak re-init --}}
+    <script>
+      window.deferLoadingAlpine = (alpineInit) => {
+        document.addEventListener('livewire:load', alpineInit);
+      }
+    </script>
+      </head>
+
+  <body class="bg-slate-200 dark:bg-slate-700">
+    @livewire('partials.navbar')
+
+    <main>
+      {{ $slot }}
+    </main>
+
+    @livewire('partials.footer')
+
+    {{-- Livewire scripts: PASANG SEKALI SAJA DI LAYOUT --}}
+    @livewireScripts
+
+    {{-- SweetAlert: pasang sekali & tahan saat navigate --}}
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11" data-navigate-once></script>
+    <x-livewire-alert::scripts />
+
+    {{-- Tempat script tambahan dari view (mis. listener open-wa) --}}
+    @stack('scripts')
+  </body>
 </html>

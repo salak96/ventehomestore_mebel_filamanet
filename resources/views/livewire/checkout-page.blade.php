@@ -1,5 +1,5 @@
 @php
-  $rp = fn ($v) => 'Rp ' . number_format((float) $v, 0, ',', '.');
+    $rp = fn($v) => 'Rp ' . number_format((float) $v, 0, ',', '.');
 @endphp
 <div class="w-full max-w-[85rem] py-10 px-4 sm:px-6 lg:px-8 mx-auto">
     <h1 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">
@@ -86,19 +86,13 @@
                 </div>
 
                 <!-- Metode Pembayaran -->
-             <div class="text-lg font-semibold mb-4">Metode Pembayaran</div>
-                    <ul class="grid w-full gap-6 md:grid-cols-2">
+                <div class="text-lg font-semibold mb-4">Metode Pembayaran</div>
+                <ul class="grid w-full gap-6 md:grid-cols-2">
                     <li class="list-none">
-                        <input
-                        class="hidden peer"
-                        wire:model="payment_method"
-                        id="cod"
-                        name="payment_method"
-                        value="cod"
-                        type="radio"
-                        />
+                        <input class="hidden peer" wire:model="payment_method" id="cod" name="payment_method"
+                            value="cod" type="radio" />
                         <label for="cod"
-                        class="inline-flex items-center justify-between w-full p-5 rounded-lg cursor-pointer
+                            class="inline-flex items-center justify-between w-full p-5 rounded-lg cursor-pointer
                                 border border-gray-200 bg-white text-gray-500
                                 dark:bg-gray-800 dark:border-gray-700
 
@@ -107,21 +101,15 @@
 
                                 peer-checked:text-orange-700 peer-checked:border-orange-600 peer-checked:bg-orange-50
                                 transition-colors duration-150 ease-out">
-                        <span class="w-full text-lg font-semibold">Bayar di Tempat</span>
+                            <span class="w-full text-lg font-semibold">Bayar di Tempat</span>
                         </label>
                     </li>
 
                     <li class="list-none">
-                        <input
-                        class="hidden peer"
-                        wire:model="payment_method"
-                        id="transfer"
-                        name="payment_method"
-                        value="transfer"
-                        type="radio"
-                        />
+                        <input class="hidden peer" wire:model="payment_method" id="transfer" name="payment_method"
+                            value="transfer" type="radio" />
                         <label for="transfer"
-                        class="inline-flex items-center justify-between w-full p-5 rounded-lg cursor-pointer
+                            class="inline-flex items-center justify-between w-full p-5 rounded-lg cursor-pointer
                                 border border-gray-200 bg-white text-gray-500
                                 dark:bg-gray-800 dark:border-gray-700
 
@@ -130,10 +118,10 @@
 
                                 peer-checked:text-orange-700 peer-checked:border-orange-600 peer-checked:bg-orange-50
                                 transition-colors duration-150 ease-out">
-                        <span class="w-full text-lg font-semibold">Transfer Bank</span>
+                            <span class="w-full text-lg font-semibold">Transfer Bank</span>
                         </label>
                     </li>
-                    </ul>
+                </ul>
                 @error('payment_method')
                     <div class="text-red-500 text-sm mt-2">{{ $message }}</div>
                 @enderror
@@ -149,40 +137,60 @@
                 </div>
                 <div class="flex justify-between mb-2 font-bold ">
                     <span>Subtotal</span>
-                     <span>{{ $rp($grand_total) }}</span>
+                    <span>{{ $rp($grand_total) }}</span>
                 </div>
                 <div class="flex justify-between mb-2 font-bold">
                     <span>Pajak</span>
-                      <span>{{ $rp(0) }}</span>
+                    <span>{{ $rp(0) }}</span>
                 </div>
                 <div class="flex justify-between mb-2 font-bold">
                     <span>Ongkir</span>
-                      <span>{{ $rp(0) }}</span>
+                    <span>{{ $rp(0) }}</span>
                 </div>
                 <hr class="bg-slate-400 my-4 h-1 rounded">
                 <div class="flex justify-between mb-2 font-bold">
                     <span>Total Akhir</span>
-                  <span>{{ $rp($grand_total) }}</span>
+                    <span>{{ $rp($grand_total) }}</span>
                 </div>
             </div>
 
             <!-- Tombol ke WhatsApp -->
-            @php
-                $nota = "Halo, saya ingin memesan:\n\n";
-                foreach ($cart_items as $item) {
-                    $nota .=
-                        "- {$item['name']} ({$item['quantity']}x) = Rp" .
-                        number_format($item['total_amount'], 0, ',', '.') .
-                        "\n";
-                }
-                $nota .= "\nTotal: Rp" . number_format($grand_total, 0, ',', '.');
-                $whatsappLink = 'https://wa.me/6285780020873?text=' . urlencode($nota);
-            @endphp
+            <!-- Tombol ke WhatsApp -->
+<button type="button"
+        wire:click="orderViaWhatsApp"
+        class="bg-green-500 mt-4 w-full block text-center p-3 rounded-lg text-lg text-white hover:bg-green-600">
+  Pesan via WhatsApp
+</button>
 
-            <a href="{{ $whatsappLink }}" target="_blank"
-                class="bg-green-500 mt-4 w-full block text-center p-3 rounded-lg text-lg text-white hover:bg-green-600">
-                Pesan via WhatsApp
-            </a>
+<!-- Anchor tersembunyi untuk memastikan buka tab baru -->
+<a id="wa-link" href="#" target="_blank" rel="noopener" class="hidden"></a>
+
+@push('scripts')
+<script>
+  // Attach listener SEKALI setelah Livewire siap
+  document.addEventListener('livewire:init', () => {
+    window.addEventListener('open-wa', (e) => {
+      const url = e.detail?.url;
+      if (!url) return;
+
+      // Cara 1: pakai anchor -> paling minim risiko popup blocker
+      const a = document.getElementById('wa-link');
+      a.href = url;
+      a.click();
+
+      // Fallback Cara 2 (kalau anchor gagal): window.open
+      setTimeout(() => {
+        // jika tab belum terbuka (misal dipblok), paksa window.open
+        window.open(url, '_blank', 'noopener');
+      }, 150);
+    });
+  });
+</script>
+@endpush
+
+
+            <!-- Tombol ke WhatsApp END -->
+
 
             <!-- Keranjang -->
             <div class="bg-white mt-4 rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
@@ -205,7 +213,8 @@
                                         Jumlah: {{ $item['quantity'] }}
                                     </p>
                                 </div>
-                               <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+                                <div
+                                    class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
                                     {{ $rp($item['total_amount']) }}
                                 </div>
                             </div>
@@ -216,3 +225,10 @@
         </div>
     </div>
 </div>
+<!-- Listener: buka tab baru ke WA -->
+<script>
+  window.addEventListener('open-wa', (e) => {
+    const url = e.detail.url;
+    if (url) window.open(url, '_blank'); // buka tab baru
+  });
+</script>

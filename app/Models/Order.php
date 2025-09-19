@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Order extends Model
 {
+    protected $guarded = [];
+    
     use HasFactory;
 
     protected $fillable = [
@@ -26,7 +28,7 @@ class Order extends Model
         'shipping_method',
         'notes',
     ];
-
+    
     public function user()
     {
         return $this->belongsTo(User::class);
