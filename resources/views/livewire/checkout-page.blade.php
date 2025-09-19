@@ -1,3 +1,6 @@
+@php
+  $rp = fn ($v) => 'Rp ' . number_format((float) $v, 0, ',', '.');
+@endphp
 <div class="w-full max-w-[85rem] py-10 px-4 sm:px-6 lg:px-8 mx-auto">
     <h1 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">
         Checkout
@@ -82,25 +85,59 @@
                     </div>
                 </div>
 
-                <div class="text-lg font-semibold mb-4">Metode Pembayaran</div>
-                <ul class="grid w-full gap-6 md:grid-cols-2">
-                    <li>
-                        <input class="hidden peer" wire:model="payment_method" id="cod" value="cod"
-                            type="radio" />
+                <!-- Metode Pembayaran -->
+             <div class="text-lg font-semibold mb-4">Metode Pembayaran</div>
+                    <ul class="grid w-full gap-6 md:grid-cols-2">
+                    <li class="list-none">
+                        <input
+                        class="hidden peer"
+                        wire:model="payment_method"
+                        id="cod"
+                        name="payment_method"
+                        value="cod"
+                        type="radio"
+                        />
                         <label for="cod"
-                            class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:border-gray-700 peer-checked:border-blue-600 peer-checked:text-orange-600hover:text-orange-400 dark:bg-gray-800">
-                            <span class="w-full text-lg font-semibold">Bayar di Tempat</span>
+                        class="inline-flex items-center justify-between w-full p-5 rounded-lg cursor-pointer
+                                border border-gray-200 bg-white text-gray-500
+                                dark:bg-gray-800 dark:border-gray-700
+
+                                hover:text-orange-600 hover:border-orange-500 hover:bg-orange-100
+                                dark:hover:text-orange-400 dark:hover:bg-orange-900/30
+
+                                peer-checked:text-orange-700 peer-checked:border-orange-600 peer-checked:bg-orange-50
+                                transition-colors duration-150 ease-out">
+                        <span class="w-full text-lg font-semibold">Bayar di Tempat</span>
                         </label>
                     </li>
-                    <li>
-                        <input class="hidden peer" wire:model="payment_method" id="transfer" value="transfer"
-                            type="radio" />
+
+                    <li class="list-none">
+                        <input
+                        class="hidden peer"
+                        wire:model="payment_method"
+                        id="transfer"
+                        name="payment_method"
+                        value="transfer"
+                        type="radio"
+                        />
                         <label for="transfer"
-                            class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:border-gray-700 peer-checked:border-blue-600 peer-checked:text-orange-600hover:text-orange-400 dark:bg-gray-800">
-                            <span class="w-full text-lg font-semibold">Transfer Bank</span>
+                        class="inline-flex items-center justify-between w-full p-5 rounded-lg cursor-pointer
+                                border border-gray-200 bg-white text-gray-500
+                                dark:bg-gray-800 dark:border-gray-700
+
+                                hover:text-orange-600 hover:border-orange-500 hover:bg-orange-100
+                                dark:hover:text-orange-400 dark:hover:bg-orange-900/30
+
+                                peer-checked:text-orange-700 peer-checked:border-orange-600 peer-checked:bg-orange-50
+                                transition-colors duration-150 ease-out">
+                        <span class="w-full text-lg font-semibold">Transfer Bank</span>
                         </label>
                     </li>
-                </ul>
+                    </ul>
+                @error('payment_method')
+                    <div class="text-red-500 text-sm mt-2">{{ $message }}</div>
+                @enderror
+
             </div>
         </div>
 
@@ -110,22 +147,22 @@
                 <div class="text-xl font-bold underline text-gray-700 dark:text-white mb-2">
                     Ringkasan Pesanan
                 </div>
-                <div class="flex justify-between mb-2 font-bold">
+                <div class="flex justify-between mb-2 font-bold ">
                     <span>Subtotal</span>
-                    <span>{{ Number::currency($grand_total, 'IDR') }}</span>
+                     <span>{{ $rp($grand_total) }}</span>
                 </div>
                 <div class="flex justify-between mb-2 font-bold">
                     <span>Pajak</span>
-                    <span>{{ Number::currency(0, 'IDR') }}</span>
+                      <span>{{ $rp(0) }}</span>
                 </div>
                 <div class="flex justify-between mb-2 font-bold">
                     <span>Ongkir</span>
-                    <span>{{ Number::currency(0, 'IDR') }}</span>
+                      <span>{{ $rp(0) }}</span>
                 </div>
                 <hr class="bg-slate-400 my-4 h-1 rounded">
                 <div class="flex justify-between mb-2 font-bold">
                     <span>Total Akhir</span>
-                    <span>{{ Number::currency($grand_total, 'IDR') }}</span>
+                  <span>{{ $rp($grand_total) }}</span>
                 </div>
             </div>
 
@@ -168,9 +205,8 @@
                                         Jumlah: {{ $item['quantity'] }}
                                     </p>
                                 </div>
-                                <div
-                                    class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-                                    {{ Number::currency($item['total_amount'], 'IDR') }}
+                               <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+                                    {{ $rp($item['total_amount']) }}
                                 </div>
                             </div>
                         </li>
