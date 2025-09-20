@@ -87,106 +87,63 @@
                     <form wire:submit.prevent="updatePassword" class="grid gap-y-4">
                         {{-- Password saat ini --}}
                         <div>
-                            <label for="current_password" class="block text-sm mb-2 dark:text-white">Kata Sandi Saat
-                                Ini</label>
-                            <div x-data="{ show: false }" class="relative">
-                                <input :type="show ? 'text' : 'password'" id="current_password"
+                            <label for="current_password" class="block text-sm mb-2 dark:text-white">Kata Sandi Saat Ini</label>
+                            <div x-data="{ showCurrent: false }" class="relative">
+                                <input :type="showCurrent ? 'text' : 'password'" id="current_password"
                                     wire:model="current_password"
                                     class="py-3 px-4 pr-10 block w-full border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-300 dark:focus:ring-gray-600"
                                     aria-describedby="current-password-error">
-                                <button type="button" @click="show=!show"
-                                    :aria-label="show ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi'"
+                                <button type="button" @click="showCurrent = !showCurrent"
+                                    :aria-label="showCurrent ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi'"
                                     class="absolute inset-y-0 end-0 pe-3 flex items-center">
-                                    <svg x-show="!show" class="h-5 w-5 text-gray-500" viewBox="0 0 24 24" fill="none"
-                                        stroke="currentColor" stroke-width="1.5">
-                                        <path
-                                            d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12s-3.75 6.75-9.75 6.75S2.25 12 2.25 12z" />
-                                        <circle cx="12" cy="12" r="3" />
-                                    </svg>
-                                    <svg x-show="show" class="h-5 w-5 text-gray-500" viewBox="0 0 24 24" fill="none"
-                                        stroke="currentColor" stroke-width="1.5">
-                                        <path d="M3 3l18 18" />
-                                        <path d="M10.6 10.6A3 3 0 0 0 12 15a3 3 0 0 0 3-3" />
-                                        <path
-                                            d="M6.2 6.2C4.2 7.4 2.7 9.1 2.25 12c0 0 3.75 6.75 9.75 6.75 2.08 0 3.89-.57 5.39-1.47" />
-                                        <path
-                                            d="M13.5 6.35c.47-.08.93-.1 1.5-.1 6 0 9.75 6.75 9.75 6.75-.33 1.18-1.04 2.38-2.03 3.48" />
-                                    </svg>
+                                    <svg x-show="!showCurrent" class="h-5 w-5 text-gray-500" ...></svg>
+                                    <svg x-show="showCurrent" class="h-5 w-5 text-gray-500" ...></svg>
                                 </button>
                                 @error('current_password')
-                                    <p class="text-xs text-gray-500 mt-2" id="current-password-error">{{ $message }}
-                                    </p>
+                                    <p class="text-xs text-gray-500 mt-2" id="current-password-error">{{ $message }}</p>
                                 @enderror
                             </div>
                         </div>
 
-                        {{-- Password baru --}}
-                        <div>
-                            <label for="password" class="block text-sm mb-2 dark:text-white">Kata Sandi Baru</label>
-                            <div x-data="{ show: false }" class="relative">
-                                <input :type="show ? 'text' : 'password'" id="password" wire:model="password"
-                                    class="py-3 px-4 pr-10 block w-full border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-300 dark:focus:ring-gray-600"
-                                    aria-describedby="password-error">
-                                <button type="button" @click="show=!show"
-                                    :aria-label="show ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi'"
-                                    class="absolute inset-y-0 end-0 pe-3 flex items-center">
-                                    <svg x-show="!show" class="h-5 w-5 text-gray-500" viewBox="0 0 24 24" fill="none"
-                                        stroke="currentColor" stroke-width="1.5">
-                                        <path
-                                            d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12s-3.75 6.75-9.75 6.75S2.25 12 2.25 12z" />
-                                        <circle cx="12" cy="12" r="3" />
-                                    </svg>
-                                    <svg x-show="show" class="h-5 w-5 text-gray-500" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="1.5">
-                                        <path d="M3 3l18 18" />
-                                        <path d="M10.6 10.6A3 3 0 0 0 12 15a3 3 0 0 0 3-3" />
-                                        <path
-                                            d="M6.2 6.2C4.2 7.4 2.7 9.1 2.25 12c0 0 3.75 6.75 9.75 6.75 2.08 0 3.89-.57 5.39-1.47" />
-                                        <path
-                                            d="M13.5 6.35c.47-.08.93-.1 1.5-.1 6 0 9.75 6.75 9.75 6.75-.33 1.18-1.04 2.38-2.03 3.48" />
-                                    </svg>
-                                </button>
-                                @error('password')
-                                    <p class="text-xs text-gray-500 mt-2" id="password-error">{{ $message }}</p>
-                                @enderror
-                            </div>
-                        </div>
-
-                        {{-- Konfirmasi password --}}
-                        <div>
-                            <label for="password_confirmation" class="block text-sm mb-2 dark:text-white">Konfirmasi
-                                Kata Sandi Baru</label>
-                            <div x-data="{ show: false }" class="relative">
-                                <input :type="show ? 'text' : 'password'" id="password_confirmation"
-                                    wire:model="password_confirmation"
-                                    class="py-3 px-4 pr-10 block w-full border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-300 dark:focus:ring-gray-600"
-                                    aria-describedby="password-confirmation-error">
-                                <button type="button" @click="show=!show"
-                                    :aria-label="show ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi'"
-                                    class="absolute inset-y-0 end-0 pe-3 flex items-center">
-                                    <svg x-show="!show" class="h-5 w-5 text-gray-500" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="1.5">
-                                        <path
-                                            d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12s-3.75 6.75-9.75 6.75S2.25 12 2.25 12z" />
-                                        <circle cx="12" cy="12" r="3" />
-                                    </svg>
-                                    <svg x-show="show" class="h-5 w-5 text-gray-500" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="1.5">
-                                        <path d="M3 3l18 18" />
-                                        <path d="M10.6 10.6A3 3 0 0 0 12 15a3 3 0 0 0 3-3" />
-                                        <path
-                                            d="M6.2 6.2C4.2 7.4 2.7 9.1 2.25 12c0 0 3.75 6.75 9.75 6.75 2.08 0 3.89-.57 5.39-1.47" />
-                                        <path
-                                            d="M13.5 6.35c.47-.08.93-.1 1.5-.1 6 0 9.75 6.75 9.75 6.75-.33 1.18-1.04 2.38-2.03 3.48" />
-                                    </svg>
-                                </button>
-                                @error('password_confirmation')
-                                    <p class="text-xs text-gray-500 mt-2" id="password-confirmation-error">
-                                        {{ $message }}</p>
-                                @enderror
-                            </div>
-                        </div>
-
+            {{-- Password baru --}}
+            <div>
+                <label for="password" class="block text-sm mb-2 dark:text-white">Kata Sandi Baru</label>
+                <div x-data="{ showNew: false }" class="relative">
+                    <input :type="showNew ? 'text' : 'password'" id="password"
+                        wire:model="password"
+                        class="py-3 px-4 pr-10 block w-full border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-300 dark:focus:ring-gray-600"
+                        aria-describedby="password-error">
+                    <button type="button" @click="showNew = !showNew"
+                        :aria-label="showNew ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi'"
+                        class="absolute inset-y-0 end-0 pe-3 flex items-center">
+                        <svg x-show="!showNew" class="h-5 w-5 text-gray-500" ...></svg>
+                        <svg x-show="showNew" class="h-5 w-5 text-gray-500" ...></svg>
+                    </button>
+                    @error('password')
+                        <p class="text-xs text-gray-500 mt-2" id="password-error">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+{{-- Konfirmasi password --}}
+<div>
+    <label for="password_confirmation" class="block text-sm mb-2 dark:text-white">Konfirmasi Kata Sandi Baru</label>
+    <div x-data="{ showConfirm: false }" class="relative">
+        <input :type="showConfirm ? 'text' : 'password'" id="password_confirmation"
+            wire:model="password_confirmation"
+            class="py-3 px-4 pr-10 block w-full border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-300 dark:focus:ring-gray-600"
+            aria-describedby="password-confirmation-error">
+        <button type="button" @click="showConfirm = !showConfirm"
+            :aria-label="showConfirm ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi'"
+            class="absolute inset-y-0 end-0 pe-3 flex items-center">
+            <svg x-show="!showConfirm" class="h-5 w-5 text-gray-500" ...></svg>
+            <svg x-show="showConfirm" class="h-5 w-5 text-gray-500" ...></svg>
+        </button>
+        @error('password_confirmation')
+            <p class="text-xs text-gray-500 mt-2" id="password-confirmation-error">{{ $message }}</p>
+        @enderror
+    </div>
+</div>
+                        {{-- Tombol submit --}}
                         <div class="pt-2">
                             <button type="submit"
                                 class="w-full sm:w-auto py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">

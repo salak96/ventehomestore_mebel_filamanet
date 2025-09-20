@@ -5,11 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>{{ $title ?? 'Order' }}</title>
-
-    {{-- Vite assets (pastikan TIDAK meng-import Alpine lagi di app.js, pilih salah satu: CDN atau Vite) --}}
     {{-- HEAD --}}
-@vite(['resources/css/app.css', 'resources/js/app.js']) {{-- pastikan app.js TIDAK import Alpine --}}
-@livewireStyles
+@vite(['resources/css/app.css', 'resources/js/app.js']) 
 
     @livewireStyles
 
