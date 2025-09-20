@@ -59,18 +59,13 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->hasMany(Order::class);
     }
-      public function canAccessPanel(Panel $panel): bool
+    
+    public function canAccessPanel(\Filament\Panel $panel): bool
     {
-        // kalau ada kolom is_admin
-        return (bool) $this->is_admin;
-
-        // // atau kalau mau batasi ke email tertentu
-        //  return in_array($this->email, ['admin@ventehome.test'],password(password(1234)));
-
-    }
+    return $this->is_admin;
+   }
     public function isAdmin(): bool
     {
-    return $this->role === 'admin';
+        return $this->role === 'admin';
     }
-
 }

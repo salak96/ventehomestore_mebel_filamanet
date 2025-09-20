@@ -18,8 +18,8 @@ class RegisterPage extends Component
     public function save() 
     {
         $this->validate([
-            'name' => 'required|max:20',
-            'email' => 'required|email|unique:users|max:20',
+            'name' => 'required|unique|max:255',
+            'email' => 'required|email|unique:users,email|max:255',
             'password' => 'required|min:8|max:20'
         ]);
 

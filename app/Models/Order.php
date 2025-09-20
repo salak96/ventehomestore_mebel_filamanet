@@ -2,45 +2,37 @@
 
 namespace App\Models;
 
-use App\Models\User;
-use App\Models\Address;
-use App\Models\OrderItem;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    protected $guarded = [];
-    
     use HasFactory;
 
-    protected $fillable = [
-        'user_id',
-        'grand_total',
-        'payment_method',
-        'payment_status',
-        'status',
-        'currency',
-        'shipping_amount',
-        'shipping_method',
-        'notes',
-    ];
-    
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+    // optional kalau table mengikuti konvensi 'orders' bisa dihilangkan
+    protected $table = 'orders';
 
+    // isi sesuai kolom yang ingin di-mass assign
+    protected $fillable = [
+        'first_name',
+        'last_name',
+        'phone',
+        'address',
+        'city',
+        'state',
+        'zip_code',
+        'payment_method',
+        'grand_total',
+    ];
+
+    // cast supaya grand_total jadi integer (atau 'decimal:0' jika pakai decimal)
+    protected $casts = [
+        'grand_total' => 'integer',
+    ];
+
+    // relasi (opsional) kalau kamu punya order_items
     public function items()
     {
         return $this->hasMany(OrderItem::class);
-    }
-
-    public function address()
-    {
-        return $this->hasOne(Address::class);
     }
 }
