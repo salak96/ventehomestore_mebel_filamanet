@@ -88,28 +88,52 @@ class CheckoutPage extends Component
         'grand_total' => $this->grand_total,
     ]);
 
-    // ✅ Buat pesan WA
-    $message = "Halo, saya ingin pesan.\n\n"
-             . "Nama: {$this->first_name} {$this->last_name}\n"
-             . "No HP: {$this->phone}\n"
-             . "Alamat: {$this->address}, {$this->city}, {$this->state}, {$this->zip_code}\n"
-             . "Metode Pembayaran: {$this->payment_method}\n"
-             . "Total: Rp " . number_format($this->grand_total, 0, ',', '.');
+//     // ✅ Buat pesan WA
+//     $message = "Halo, saya ingin pesan.\n\n"
+//              . "Nama: {$this->first_name} {$this->last_name}\n"
+//              . "No HP: {$this->phone}\n"
+//              . "Alamat: {$this->address}, {$this->city}, {$this->state}, {$this->zip_code}\n"
+//              . "Metode Pembayaran: {$this->payment_method}\n"
+//              . "Total: Rp " . number_format($this->grand_total, 0, ',', '.');
 
-    $url = "https://wa.me/6285642268279?text=" . urlencode($message);
+//     $url = "https://wa.me/6285642268279?text=" . urlencode($message);
 
-    // ✅ Kirim event ke frontend agar buka tab baru WA
-   $this->dispatch('open-whatsapp', url: $url);
+//     // ✅ Kirim event ke frontend agar buka tab baru WA
+//    $this->dispatch('open-whatsapp', url: $url);
 
-    // ✅ Kirim email konfirmasi
-    Mail::to(auth()->user()->email)->send(new OrderPlaced($order));
+//     // ✅ Kirim email konfirmasi
+//     Mail::to(auth()->user()->email)->send(new OrderPlaced($order));
 
-    // ✅ Hapus cookie cart
-    CartManagement::clearCartCookie();
+//     // ✅ Hapus cookie cart
+//     CartManagement::clearCartCookie();
 
-    // ✅ Redirect ke halaman terima kasih
-    return redirect('/thank-you');
+//     // ✅ Redirect ke halaman terima kasih
+//     return redirect('/thank-you');
+
     
+}
+    public function orderViaWhatsapp()
+{
+    $orderText = "Halo, saya ingin memesan.\n\n"
+        ."Rincian Pesanan:\n";
+
+    foreach ($this->cart_items as $item) {
+        $orderText .= $item['name'].' x'.$item['quantity'].' - Rp'.number_format($item['total_amount'], 0, ',', '.')."\n";
+    }
+
+    $orderText .= "\nTotal: Rp".number_format($this->grand_total, 0, ',', '.');
+
+    $orderText .= "\n\nAlamat Pengiriman:\n"
+        .$this->first_name.' '.$this->last_name."\n"
+        .$this->address."\n"
+        .$this->city.', '.$this->state.' '.$this->zip_code
+        ."\nNomor HP: ".$this->phone;
+
+    $orderText .= "\n\nMetode Pembayaran: ".ucwords(str_replace('_', ' ', $this->payment_method));
+
+    $url = "https://wa.me/6285642268279?text=".urlencode($orderText);
+
+    $this->dispatch('open-whatsapp', url: $url);
 }
 
 }
