@@ -141,4 +141,10 @@ class CartManagement {
         self::addCartItemsToCookie($cart_items);
         return count($cart_items);
     }
+    public static function clearCartCookie()
+    {
+        // Assuming the cart is stored in a cookie named 'cart'
+        Cookie::queue(Cookie::forget('cart'));
+    }
+
 }

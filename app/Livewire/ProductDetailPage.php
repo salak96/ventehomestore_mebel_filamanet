@@ -41,7 +41,7 @@ class ProductDetailPage extends Component
 
         $this->dispatch('update-cart-count', total_count: $total_count)->to(Navbar::class);
 
-        $this->alert('success', 'Product added to the cart successfully!', [
+        $this->alert('success', 'Produk berhasil ditambahkan ke keranjang!', [
             'position' => 'bottom-end',
             'timer' => 3000,
             'toast' => true,

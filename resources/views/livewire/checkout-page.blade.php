@@ -1,178 +1,216 @@
-@php
-  // Helper format rupiah: tanpa desimal
-  $rupiah = static function ($v): string {
-      $v = (float) $v;
-      return 'Rp ' . number_format($v, 0, ',', '.');
-  };
-
-  // Ringkasan biaya (ubah kalau perlu)
-  $pajak     = 0;
-  $ongkir    = 0;
-  $subtotal  = (float) ($grand_total ?? 0);
-  $totalAkhir = $subtotal + $pajak + $ongkir;
-
-  // WhatsApp nota
-  $nota = "Halo, saya ingin memesan:\n\n";
-  foreach ($cart_items as $item) {
-      $nota .= "- {$item['name']} ({$item['quantity']}x) = " . $rupiah($item['total_amount']) . "\n";
-  }
-  $nota .= "\nTotal: " . $rupiah($totalAkhir);
-  $whatsappLink = "https://wa.me/6285780020873?text=" . urlencode($nota);
-@endphp
-
 <div class="w-full max-w-[85rem] py-10 px-4 sm:px-6 lg:px-8 mx-auto">
-  <h1 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Checkout</h1>
-
-  <div class="grid grid-cols-12 gap-4">
-    <!-- Kiri: Form Alamat + Metode Pembayaran -->
-    <div class="col-span-12 lg:col-span-8">
-      <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
-        <!-- Alamat Pengiriman -->
-        <div class="mb-6">
-          <h2 class="text-xl font-bold underline text-gray-700 dark:text-white mb-2">Alamat Pengiriman</h2>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label for="first_name" class="block text-gray-700 dark:text-white mb-1">Nama Depan</label>
-              <input id="first_name" type="text" wire:model="first_name"
-                     class="w-full rounded-lg border @error('first_name') border-red-500 @enderror py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none">
-              @error('first_name') <div class="text-red-500 text-sm">{{ $message }}</div> @enderror
-            </div>
-            <div>
-              <label for="last_name" class="block text-gray-700 dark:text-white mb-1">Nama Belakang</label>
-              <input id="last_name" type="text" wire:model="last_name"
-                     class="w-full rounded-lg border @error('last_name') border-red-500 @enderror py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none">
-              @error('last_name') <div class="text-red-500 text-sm">{{ $message }}</div> @enderror
-            </div>
-          </div>
-
-          <div class="mt-4">
-            <label for="phone" class="block text-gray-700 dark:text-white mb-1">No. Telepon</label>
-            <input id="phone" type="text" wire:model="phone"
-                   class="w-full rounded-lg border @error('phone') border-red-500 @enderror py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none">
-            @error('phone') <div class="text-red-500 text-sm">{{ $message }}</div> @enderror
-          </div>
-
-          <div class="mt-4">
-            <label for="address" class="block text-gray-700 dark:text-white mb-1">Alamat Lengkap</label>
-            <input id="address" type="text" wire:model="address"
-                   class="w-full rounded-lg border @error('address') border-red-500 @enderror py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none">
-            @error('address') <div class="text-red-500 text-sm">{{ $message }}</div> @enderror
-          </div>
-
-          <div class="mt-4">
-            <label for="city" class="block text-gray-700 dark:text-white mb-1">Kota</label>
-            <input id="city" type="text" wire:model="city"
-                   class="w-full rounded-lg border @error('city') border-red-500 @enderror py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none">
-            @error('city') <div class="text-red-500 text-sm">{{ $message }}</div> @enderror
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-            <div>
-              <label for="state" class="block text-gray-700 dark:text-white mb-1">Provinsi</label>
-              <input id="state" type="text" wire:model="state"
-                     class="w-full rounded-lg border @error('state') border-red-500 @enderror py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none">
-              @error('state') <div class="text-red-500 text-sm">{{ $message }}</div> @enderror
-            </div>
-            <div>
-              <label for="zip" class="block text-gray-700 dark:text-white mb-1">Kode Pos</label>
-              <input id="zip" type="text" wire:model="zip_code"
-                     class="w-full rounded-lg border @error('zip_code') border-red-500 @enderror py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none">
-              @error('zip_code') <div class="text-red-500 text-sm">{{ $message }}</div> @enderror
-            </div>
-          </div>
-        </div>
-
-        <!-- Metode Pembayaran -->
-        <div class="text-lg font-semibold mb-4">Metode Pembayaran</div>
-        <ul class="grid w-full gap-4 md:grid-cols-2">
-          <li>
-            <input class="hidden peer" id="cod" type="radio" value="cod" wire:model="payment_method" />
-            <label for="cod"
-                   class="inline-flex items-center justify-between w-full p-5 text-gray-600 bg-white border border-gray-200 rounded-lg cursor-pointer dark:border-gray-700 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:bg-gray-100 dark:bg-gray-800">
-              <span class="w-full text-lg font-semibold">Bayar di Tempat</span>
-            </label>
-          </li>
-          <li>
-            <input class="hidden peer" id="transfer" type="radio" value="transfer" wire:model="payment_method" />
-            <label for="transfer"
-                   class="inline-flex items-center justify-between w-full p-5 text-gray-600 bg-white border border-gray-200 rounded-lg cursor-pointer dark:border-gray-700 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:bg-gray-100 dark:bg-gray-800">
-              <span class="w-full text-lg font-semibold">Transfer Bank</span>
-            </label>
-          </li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- Kanan: Keranjang + Ringkasan -->
-    <div class="col-span-12 lg:col-span-4 space-y-4">
-      <!-- Keranjang -->
-      <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
-        <div class="text-xl font-bold underline text-gray-700 dark:text-white mb-2">Detail Keranjang</div>
-
-        <ul class="divide-y divide-gray-200 dark:divide-gray-700" role="list">
-          @foreach ($cart_items as $item)
-            <li class="py-3 sm:py-4" wire:key="{{ $item['product_id'] }}">
-              <div class="flex items-center">
-                <div class="flex-shrink-0">
-                  @php
-                    $img = $item['image'] ?? null;
-                    $imgUrl = $img ? url('storage', $img) : asset('images/default.png');
-                  @endphp
-                  <img src="{{ $imgUrl }}" alt="{{ $item['name'] }}" class="w-12 h-12 rounded-full object-cover">
-                </div>
-                <div class="flex-1 min-w-0 ms-4">
-                  <p class="text-sm font-medium text-gray-900 truncate dark:text-white">{{ $item['name'] }}</p>
-                  <p class="text-sm text-gray-500 truncate dark:text-gray-400">Jumlah: {{ $item['quantity'] }}</p>
-                </div>
-                <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-                  {{ $rupiah($item['total_amount']) }}
-                </div>
-              </div>
-            </li>
-          @endforeach
-        </ul>
-      </div>
-
-      <!-- Ringkasan Pesanan -->
-      <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
-        <div class="text-xl font-bold underline text-gray-700 dark:text-white mb-2">Ringkasan Pesanan</div>
-
-        <div class="flex justify-between mb-2 font-bold">
-          <span>Subtotal</span>
-          <span>{{ $rupiah($subtotal) }}</span>
-        </div>
-        <div class="flex justify-between mb-2 font-bold">
-          <span>Pajak</span>
-          <span>{{ $rupiah($pajak) }}</span>
-        </div>
-        <div class="flex justify-between mb-2 font-bold">
-          <span>Ongkir</span>
-          <span>{{ $rupiah($ongkir) }}</span>
-        </div>
-
-        <hr class="bg-slate-400 my-4 h-[2px] rounded">
-
-        <div class="flex justify-between mb-2 font-bold text-lg">
-          <span>Total Akhir</span>
-          <span>{{ $rupiah($totalAkhir) }}</span>
-        </div>
-
-        <!-- Tombol ke WhatsApp -->
-        <a href="{{ $whatsappLink }}" target="_blank"
-           class="bg-green-500 mt-4 w-full block text-center p-3 rounded-lg text-lg text-white hover:bg-green-600">
-          Pesan via WhatsApp
-        </a>
-      </div>
-    </div>
-  </div>
+	<h1 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">
+		Checkout
+	</h1>
+	<form wire:submit.prevent="save">
+		<div class="grid grid-cols-12 gap-4">
+			<div class="md:col-span-12 lg:col-span-8 col-span-12">
+				<!-- Card -->
+				<div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
+					<!-- Shipping Address -->
+					<div class="mb-6">
+						<h2 class="text-xl font-bold underline text-gray-700 dark:text-white mb-2">
+							Shipping Address
+						</h2>
+						<div class="grid grid-cols-2 gap-4">
+							<div>
+								<label class="block text-gray-700 dark:text-white mb-1" for="first_name">
+									First Name
+								</label>
+								<input wire:model="first_name" class="w-full rounded-lg border @error('first_name') border-red-500 @enderror py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none" id="first_name" type="text">
+								</input>
+								@error('first_name')
+								<div class="text-red-500 text-sm">{{$message}}</div>
+								@enderror
+							</div>
+							<div>
+								<label class="block text-gray-700 dark:text-white mb-1" for="last_name">
+									Last Name
+								</label>
+								<input wire:model="last_name" class="w-full rounded-lg border @error('last_name') border-red-500 @enderror py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none" id="last_name" type="text">
+								</input>
+								@error('last_name')
+							<div class="text-red-500 text-sm">{{$message}}</div>
+							@enderror
+							</div>
+						</div>
+						<div class="mt-4">
+							<label class="block text-gray-700 dark:text-white mb-1" for="phone">
+								Phone
+							</label>
+							<input wire:model="phone" class="w-full rounded-lg border @error('phone') border-red-500 @enderror py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none" id="phone" type="text">
+							</input>
+							@error('phone')
+							<div class="text-red-500 text-sm">{{$message}}</div>
+							@enderror
+						</div>
+						<div class="mt-4">
+							<label class="block text-gray-700 dark:text-white mb-1" for="address">
+								Address
+							</label>
+							<input wire:model="address" class="w-full rounded-lg border @error('address') border-red-500 @enderror py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none" id="address" type="text">
+							</input>
+							@error('address')
+							<div class="text-red-500 text-sm">{{$message}}</div>
+							@enderror
+						</div>
+						<div class="mt-4">
+							<label class="block text-gray-700 dark:text-white mb-1" for="city">
+								City
+							</label>
+							<input wire:model="city" class="w-full rounded-lg border @error('city') border-red-500 @enderror py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none" id="city" type="text">
+							</input>
+							@error('city')
+							<div class="text-red-500 text-sm">{{$message}}</div>
+							@enderror
+						</div>
+						<div class="grid grid-cols-2 gap-4 mt-4">
+							<div>
+								<label class="block text-gray-700 dark:text-white mb-1" for="state">
+									State
+								</label>
+								<input wire:model="state" class="w-full rounded-lg border @error('state') border-red-500 @enderror py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none" id="state" type="text">
+								</input>
+								@error('state')
+								<div class="text-red-500 text-sm">{{$message}}</div>
+								@enderror
+							</div>
+							<div>
+								<label class="block text-gray-700 dark:text-white mb-1" for="zip">
+									ZIP Code
+								</label>
+								<input wire:model="zip_code" class="w-full rounded-lg border @error('zip_code') border-red-500 @enderror py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none" id="zip" type="text">
+								</input>
+								@error('zip_code')
+								<div class="text-red-500 text-sm">{{$message}}</div>
+								@enderror
+							</div>
+						</div>
+					</div>
+					<div class="text-lg font-semibold mb-4">
+						Select Payment Method
+					</div>
+					<ul class="grid w-full gap-6 md:grid-cols-2">
+						<li>
+							<input class="hidden peer" wire:model="payment_method" id="hosting-small" value="cod" type="radio" value="hosting-small" />
+							<label class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700" for="hosting-small">
+								<div class="block">
+									<div class="w-full text-lg font-semibold">
+										Cash on Delivery
+									</div>
+								</div>
+								<svg aria-hidden="true" class="w-5 h-5 ms-3 rtl:rotate-180" fill="none" viewbox="0 0 14 10" xmlns="http://www.w3.org/2000/svg">
+									<path d="M1 5h12m0 0L9 1m4 4L9 9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+									</path>
+								</svg>
+							</label>
+							@error('payment_method')
+							<div class="text-red-500 text-sm">{{$message}}</div>
+							@enderror
+						</li>
+						<li>
+							<input class="hidden peer" wire:model="payment_method" value="stripe" id="hosting-big" type="radio" value="hosting-big">
+							<label class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700" for="hosting-big">
+								<div class="block">
+									<div class="w-full text-lg font-semibold">
+										Stripe
+									</div>
+								</div>
+								<svg aria-hidden="true" class="w-5 h-5 ms-3 rtl:rotate-180" fill="none" viewbox="0 0 14 10" xmlns="http://www.w3.org/2000/svg">
+									<path d="M1 5h12m0 0L9 1m4 4L9 9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+									</path>
+								</svg>
+							</label>
+							</input>
+							@error('payment_method')
+							<div class="text-red-500 text-sm">{{$message}}</div>
+							@enderror
+						</li>
+					</ul>
+				</div>
+				<!-- End Card -->
+			</div>
+			<div class="md:col-span-12 lg:col-span-4 col-span-12">
+				<div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
+					<div class="text-xl font-bold underline text-gray-700 dark:text-white mb-2">
+						ORDER SUMMARY
+					</div>
+					<div class="flex justify-between mb-2 font-bold">
+						<span>
+							Subtotal
+						</span>
+						<span>
+							{{ Number::currency($grand_total, 'IDR') }}
+						</span>
+					</div>
+					<div class="flex justify-between mb-2 font-bold">
+						<span>
+							Taxes
+						</span>
+						<span>
+							{{ Number::currency(0, 'IDR') }}
+						</span>
+					</div>
+					<div class="flex justify-between mb-2 font-bold">
+						<span>
+							Shipping Cost
+						</span>
+						<span>
+							{{ Number::currency(0, 'IDR') }}
+						</span>
+					</div>
+					<hr class="bg-slate-400 my-4 h-1 rounded">
+					<div class="flex justify-between mb-2 font-bold">
+						<span>
+							Grand Total
+						</span>
+						<span>
+							{{ Number::currency($grand_total, 'IDR') }}
+						</span>
+					</div>
+					</hr>
+				</div>
+	<button type="submit" class="bg-green-500 mt-4 w-full p-3 rounded-lg text-lg text-white hover:bg-green-600">
+		<a href="whatsapp://send?phone=+6285642268279&text=Hello,%20I%20want%20to%20place%20an%20order.%0A%0AOrder%20Details:%0A{{ urlencode(implode('%0A', array_map(fn($item) => $item['name'] . ' x' . $item['quantity'] . ' - ' . Number::currency($item['total_amount'], 'IDR'), $cart_items))) }}%0A%0ATotal:%20{{ Number::currency($grand_total, 'IDR') }}%0A%0AShipping%20Address:%0A{{ urlencode($first_name . ' ' . $last_name) }}%0A{{ urlencode($address) }}%0A{{ urlencode($city . ', ' . $state . ' ' . $zip_code) }}%0APhone:%20{{ urlencode($phone) }}%0A%0APayment%20Method:%20{{ urlencode(ucwords(str_replace('_', ' ', $payment_method))) }}">
+			Place Order via WhatsApp
+		</a>
+</button>
+				<div class="bg-white mt-4 rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
+					<div class="text-xl font-bold underline text-gray-700 dark:text-white mb-2">
+						BASKET SUMMARY
+					</div>
+					<ul class="divide-y divide-gray-200 dark:divide-gray-700" role="list">
+						@foreach ($cart_items as $item)
+						<li class="py-3 sm:py-4" wire:key="{{$item['product_id']}}">
+							<div class="flex items-center">
+								<div class="flex-shrink-0">
+									<img alt="{{$item['name']}}" class="w-12 h-12 rounded-full" src="{{url('storage', $item['image'])}}">
+									</img>
+								</div>
+								<div class="flex-1 min-w-0 ms-4">
+									<p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+										{{$item['name']}}
+									</p>
+									<p class="text-sm text-gray-500 truncate dark:text-gray-400">
+										Quantity: {{$item['quantity']}}
+									</p>
+								</div>
+								<div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+									{{ Number::currency($item['total_amount'], 'IDR') }}
+								</div>
+							</div>
+						</li>
+						@endforeach
+					</ul>
+				</div>
+			</div>
+		</div>
+	</form>
 </div>
-@push('styles')
-  <style>
-    /* Sesuaikan gaya input radio */
-    input[type="radio"]:checked + label {
-      border-color: #3b82f6; /* Biru */
-      background-color: #eff6ff; /* Biru muda */
-    }
-  </style>
-@endpush
+<script>
+    document.addEventListener('livewire:init', () => {
+        @this.on('open-whatsapp', (event) => {
+            window.open(event.url, '_blank');
+        });
+    });
+</script>

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Livewire;
+
 use Illuminate\Support\Facades\Schema;
 use App\Models\Brand;
 use App\Models\Product;
@@ -35,7 +36,13 @@ class ProductsPage extends Component
     public function updated($name): void // NEW
     {
         if (in_array($name, [
-            'search','sort','selected_categories','selected_brands','featured','onSale','price_range'
+            'search',
+            'sort',
+            'selected_categories',
+            'selected_brands',
+            'featured',
+            'onSale',
+            'price_range'
         ])) {
             $this->resetPage();
         }
@@ -47,7 +54,7 @@ class ProductsPage extends Component
         $total_count = CartManagement::addItemToCart($product_id);
         $this->dispatch('update-cart-count', total_count: $total_count)->to(Navbar::class);
 
-        $this->alert('success', 'Product added to the cart successfully!', [
+        $this->alert('success', 'Produk berhasil ditambahkan ke keranjang!', [
             'position' => 'bottom-end',
             'timer' => 3000,
             'toast' => true,
@@ -63,12 +70,12 @@ class ProductsPage extends Component
         // NEW: filter pencarian (nama, slug, deskripsi, sku)
         if (filled($this->search)) { // NEW
             $term = trim($this->search);
-            $like = '%'.str_replace(['%','_'], ['\%','\_'], $term).'%';
+            $like = '%' . str_replace(['%', '_'], ['\%', '\_'], $term) . '%';
             $productQuery->where(function ($q) use ($like) {
                 $q->where('name', 'like', $like)
-                  ->orWhere('slug', 'like', $like)
-                  ->orWhere('description', 'like', $like)
-                  ->orWhere('sku', 'like', $like); // opsional: hapus jika tidak punya kolom sku
+                    ->orWhere('slug', 'like', $like)
+                    ->orWhere('description', 'like', $like)
+                    ->orWhere('sku', 'like', $like); // opsional: hapus jika tidak punya kolom sku
             });
         }
 
@@ -98,21 +105,21 @@ class ProductsPage extends Component
             $productQuery->orderBy('price');
         }
         // filter pencarian (nama, slug, deskripsi, opsional sku)
-if (filled($this->search)) {
-    $term = trim($this->search);
-    $like = '%'.str_replace(['%','_'], ['\%','\_'], $term).'%';
+        if (filled($this->search)) {
+            $term = trim($this->search);
+            $like = '%' . str_replace(['%', '_'], ['\%', '\_'], $term) . '%';
 
-    $productQuery->where(function ($q) use ($like) {
-        $q->where('name', 'like', $like)
-          ->orWhere('slug', 'like', $like)
-          ->orWhere('description', 'like', $like);
+            $productQuery->where(function ($q) use ($like) {
+                $q->where('name', 'like', $like)
+                    ->orWhere('slug', 'like', $like)
+                    ->orWhere('description', 'like', $like);
 
-        // hanya tambahkan jika kolom sku memang ada
-        if (\Illuminate\Support\Facades\Schema::hasColumn('products', 'sku')) {
-            $q->orWhere('sku', 'like', $like);
+                // hanya tambahkan jika kolom sku memang ada
+                if (\Illuminate\Support\Facades\Schema::hasColumn('products', 'sku')) {
+                    $q->orWhere('sku', 'like', $like);
+                }
+            });
         }
-    });
-}
 
 
         return view('livewire.products-page', [
