@@ -100,7 +100,7 @@ class OrderResource extends Resource
                             ])
                             ->default('idr') // selaras lowercase
                             ->required(),
-                        
+
                         Select::make('shipping_method')
                             ->options([
                                 'fedex' => 'FedEx',
@@ -248,11 +248,7 @@ class OrderResource extends Resource
                     ])
                     ->searchable()
                     ->sortable(),
-                    
-                TextColumn::make('address.street_address')
-    ->label('Alamat')
-    ->sortable()
-    ->searchable(),
+
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -276,16 +272,14 @@ class OrderResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
-
     }
 
-   public static function getRelations(): array
-{
-    return [
-        AddressRelationManager::class,
-    ];
-}
-
+    public static function getRelations(): array
+    {
+        return [
+            AddressRelationManager::class,
+        ];
+    }
 
     public static function getNavigationBadge(): ?string
     {
