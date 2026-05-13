@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Product;
+use App\Models\VisitorTracking;
 use Livewire\Component;
 use Livewire\Attributes\Title;
 use App\Helpers\CartManagement;
@@ -38,6 +39,13 @@ class ProductDetailPage extends Component
     public function addToCart($product_id)
     {
         $total_count = CartManagement::addItemToCartWithQty($product_id, $this->quantity);
+
+        VisitorTracking::create([
+            'ip_address' => request()->ip(),
+            'user_agent' => request()->userAgent(),
+            'page_url'   => request()->fullUrl(),
+            'action'     => 'add_to_cart',
+        ]);
 
         $this->dispatch('update-cart-count', total_count: $total_count)->to(Navbar::class);
         $this->dispatch('cart-updated-global', total_count: $total_count);

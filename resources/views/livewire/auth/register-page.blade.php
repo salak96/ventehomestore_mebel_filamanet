@@ -120,6 +120,12 @@
 
                             <!-- End Form Group -->
 
+                            <!-- reCAPTCHA -->
+                            <div class="flex justify-center mt-4" wire:ignore>
+                                <div id="recaptcha-container-register"></div>
+                            </div>
+                            @error('recaptcha') <div class="text-red-500 text-sm text-center mt-1">{{ $message }}</div> @enderror
+
                             <button type="submit"
                                 class="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-teal-600 text-white hover:bg-teal-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">Daftar</button>
                         </div>
@@ -130,3 +136,36 @@
         </main>
     </div>
 </div>
+
+<script src="https://www.google.com/recaptcha/api.js?onload=renderRecaptchaRegister&render=explicit" async defer></script>
+<script>
+    function renderRecaptchaRegister() {
+        var container = document.getElementById('recaptcha-container-register');
+        if (!container || container.hasChildNodes()) return;
+        if (typeof grecaptcha === 'undefined') return;
+        grecaptcha.render(container.id, {
+            'sitekey': '{{ config('recaptcha.api_site_key') }}',
+            'callback': function (token) {
+                @this.set('recaptcha_token', token);
+            },
+            'expired-callback': function () {
+                @this.set('recaptcha_token', null);
+            }
+        });
+    }
+
+    document.addEventListener('livewire:init', function () {
+        Livewire.hook('component.rendered', function (_ref) {
+            var component = _ref.component;
+            if (component.name === 'register-page' && typeof grecaptcha !== 'undefined') {
+                grecaptcha.ready(function () { renderRecaptchaRegister(); });
+            }
+        });
+    });
+
+    document.addEventListener('livewire:navigated', function () {
+        if (typeof grecaptcha !== 'undefined') {
+            grecaptcha.ready(function () { renderRecaptchaRegister(); });
+        }
+    });
+</script>

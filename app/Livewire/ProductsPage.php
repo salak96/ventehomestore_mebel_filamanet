@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Illuminate\Support\Facades\Schema;
 use App\Models\Brand;
 use App\Models\Product;
+use App\Models\VisitorTracking;
 use Livewire\Component;
 use App\Models\Category;
 use Livewire\Attributes\Url;
@@ -52,6 +53,14 @@ class ProductsPage extends Component
     public function addToCart($product_id)
     {
         $total_count = CartManagement::addItemToCart($product_id);
+
+        VisitorTracking::create([
+            'ip_address' => request()->ip(),
+            'user_agent' => request()->userAgent(),
+            'page_url'   => request()->fullUrl(),
+            'action'     => 'add_to_cart',
+        ]);
+
         $this->dispatch('update-cart-count', total_count: $total_count)->to(Navbar::class);
         $this->dispatch('cart-updated-global', total_count: $total_count);
 

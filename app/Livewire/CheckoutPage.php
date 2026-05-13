@@ -13,12 +13,14 @@ class CheckoutPage extends Component
     public $first_name, $last_name, $phone, $payment_method;
     public $cart_items = [];
     public $grand_total = 0;
+    public $recaptcha_token = null;
 
     protected $rules = [
         'first_name'     => 'required|string|max:255',
         'last_name'      => 'nullable|string|max:255',
         'phone'          => 'required|string|max:20',
         'payment_method' => 'required|in:qris,stripe',
+        'recaptcha_token' => 'required',
     ];
 
     protected $messages = [
@@ -26,7 +28,28 @@ class CheckoutPage extends Component
         'phone.required'      => 'Nomor telepon wajib diisi.',
         'payment_method.required' => 'Metode pembayaran wajib dipilih.',
         'payment_method.in'   => 'Pilih metode pembayaran yang valid.',
+        'recaptcha_token.required' => 'Harap verifikasi bahwa Anda bukan robot.',
     ];
+
+    protected function validateRecaptcha(): bool
+    {
+        if (! $this->recaptcha_token) {
+            return false;
+        }
+
+        try {
+            $response = \Illuminate\Support\Facades\Http::asForm()
+                ->withoutVerifying()
+                ->post('https://www.google.com/recaptcha/api/siteverify', [
+                    'secret' => config('recaptcha.api_secret_key'),
+                    'response' => $this->recaptcha_token,
+                ]);
+
+            return $response->json('success') ?? false;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
 
     public function mount()
     {
@@ -52,6 +75,11 @@ class CheckoutPage extends Component
     public function save()
     {
         $this->validate();
+
+        if (! $this->validateRecaptcha()) {
+            $this->addError('recaptcha', 'Verifikasi reCAPTCHA gagal. Silakan coba lagi.');
+            return;
+        }
 
         $order = Order::create([
             'user_id'        => auth()->id(),
@@ -81,6 +109,11 @@ class CheckoutPage extends Component
     public function saveAndSendWhatsapp()
     {
         $this->validate();
+
+        if (! $this->validateRecaptcha()) {
+            $this->addError('recaptcha', 'Verifikasi reCAPTCHA gagal. Silakan coba lagi.');
+            return;
+        }
 
         $order = Order::create([
             'user_id'        => auth()->id(),

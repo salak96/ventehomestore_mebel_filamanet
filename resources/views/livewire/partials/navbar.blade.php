@@ -5,8 +5,9 @@
 
             {{-- Brand + Toggle --}}
             <div class="flex items-center justify-between">
-                <a class="flex-none text-xl font-semibold dark:text-white dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+                <a class="flex-none text-xl font-semibold dark:text-white dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600 flex items-center gap-2"
                     href="{{ route('home') }}" aria-label="Brand">
+                    <img src="{{ asset('logo.png') }}" alt="Logo" class="w-6 h-6">
                     <span class="text-teal-600">Android</span><span class="text-gray-700 dark:text-gray-300">Store</span>
                 </a>
 

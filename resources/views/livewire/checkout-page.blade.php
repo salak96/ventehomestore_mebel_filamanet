@@ -38,7 +38,7 @@
                     </div>
 
                     <!-- Metode Pembayaran -->
-                    <div class="text-lg font-semibold mt-6 mb-4">Pilih Metode Pembayaran</div>
+                    <div class="text-lg font-semibold mt-6 mb-4 text-gray-700 dark:text-white">Pilih Metode Pembayaran</div>
                     <ul class="grid w-full gap-6 md:grid-cols-2">
                         <li>
                             <input class="hidden peer" type="radio" id="qris" value="qris" wire:model="payment_method" />
@@ -73,24 +73,30 @@
                     <div class="text-xl font-bold underline text-gray-700 dark:text-white mb-2">
                         RINGKASAN PESANAN
                     </div>
-                    <div class="flex justify-between mb-2 font-bold">
+                    <div class="flex justify-between mb-2 font-bold text-gray-700 dark:text-white">
                         <span>Subtotal</span>
                         <span>{{ formatRupiah($grand_total) }}</span>
                     </div>
-                    <div class="flex justify-between mb-2 font-bold">
+                    <div class="flex justify-between mb-2 font-bold text-gray-700 dark:text-white">
                         <span>Pajak</span>
                         <span>{{ formatRupiah(0) }}</span>
                     </div>
-                    <div class="flex justify-between mb-2 font-bold">
+                    <div class="flex justify-between mb-2 font-bold text-gray-700 dark:text-white">
                         <span>Ongkir</span>
                         <span>{{ formatRupiah(0) }}</span>
                     </div>
                     <hr class="bg-slate-400 my-4 h-1 rounded">
-                    <div class="flex justify-between mb-2 font-bold">
+                    <div class="flex justify-between mb-2 font-bold text-gray-700 dark:text-white">
                         <span>Total Bayar</span>
                         <span>{{ formatRupiah($grand_total) }}</span>
                     </div>
                 </div>
+
+                <!-- reCAPTCHA -->
+                <div class="mt-4 flex justify-center" wire:ignore>
+                    <div id="recaptcha-container"></div>
+                </div>
+                @error('recaptcha') <div class="text-red-500 text-sm text-center mt-1">{{ $message }}</div> @enderror
 
                 <!-- Tombol Simpan & WA -->
                 <button type="button" wire:click="saveAndSendWhatsapp"
@@ -132,10 +138,39 @@
     </form>
 </div>
 
+<script src="https://www.google.com/recaptcha/api.js?onload=renderRecaptchaCheckout&render=explicit" async defer></script>
 <script>
-document.addEventListener('livewire:init', () => {
-    Livewire.on('open-whatsapp', (url) => {
-        window.open(url, '_blank');
+    function renderRecaptchaCheckout() {
+        var container = document.getElementById('recaptcha-container');
+        if (!container || container.hasChildNodes()) return;
+        if (typeof grecaptcha === 'undefined') return;
+        grecaptcha.render(container.id, {
+            'sitekey': '{{ config('recaptcha.api_site_key') }}',
+            'callback': function (token) {
+                @this.set('recaptcha_token', token);
+            },
+            'expired-callback': function () {
+                @this.set('recaptcha_token', null);
+            }
+        });
+    }
+
+    document.addEventListener('livewire:init', function () {
+        Livewire.on('open-whatsapp', function (url) {
+            window.open(url, '_blank');
+        });
+
+        Livewire.hook('component.rendered', function (_ref) {
+            var component = _ref.component;
+            if (component.name === 'checkout-page' && typeof grecaptcha !== 'undefined') {
+                grecaptcha.ready(function () { renderRecaptchaCheckout(); });
+            }
+        });
     });
-});
+
+    document.addEventListener('livewire:navigated', function () {
+        if (typeof grecaptcha !== 'undefined') {
+            grecaptcha.ready(function () { renderRecaptchaCheckout(); });
+        }
+    });
 </script>
