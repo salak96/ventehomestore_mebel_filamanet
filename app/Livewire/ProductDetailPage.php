@@ -40,6 +40,7 @@ class ProductDetailPage extends Component
         $total_count = CartManagement::addItemToCartWithQty($product_id, $this->quantity);
 
         $this->dispatch('update-cart-count', total_count: $total_count)->to(Navbar::class);
+        $this->dispatch('cart-updated-global', total_count: $total_count);
 
         $this->alert('success', 'Produk berhasil ditambahkan ke keranjang!', [
             'position' => 'bottom-end',

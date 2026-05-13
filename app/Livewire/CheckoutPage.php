@@ -22,8 +22,9 @@ class CheckoutPage extends Component
     ];
 
     protected $messages = [
-        'first_name.required' => 'First name wajib diisi.',
+        'first_name.required' => 'Nama depan wajib diisi.',
         'phone.required'      => 'Nomor telepon wajib diisi.',
+        'payment_method.required' => 'Metode pembayaran wajib dipilih.',
         'payment_method.in'   => 'Pilih metode pembayaran yang valid.',
     ];
 
