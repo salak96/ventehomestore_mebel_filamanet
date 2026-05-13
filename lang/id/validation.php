@@ -124,16 +124,9 @@ return [
     ],
 
     'attributes' => [
-        'first_name'     => 'Nama depan',
-        'last_name'      => 'Nama belakang',
-        'phone'          => 'Nomor telepon',
         'email'          => 'Email',
         'password'       => 'Kata sandi',
         'payment_method' => 'Metode pembayaran',
-        'street_address' => 'Alamat lengkap',
-        'city'           => 'Kota',
-        'state'          => 'Provinsi',
-        'zip_code'       => 'Kode pos',
         'name'           => 'Nama',
         'message'        => 'Pesan',
     ],

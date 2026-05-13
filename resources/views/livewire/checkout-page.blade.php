@@ -12,15 +12,12 @@
                     </h2>
 
                     <div class="grid grid-cols-2 gap-4">
-                        <!-- Nama Depan -->
                         <div>
                             <label for="first_name" class="block text-gray-700 dark:text-white mb-1">Nama Depan</label>
                             <input id="first_name" type="text" wire:model="first_name"
                                 class="w-full rounded-lg border @error('first_name') border-red-500 @enderror py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none">
                             @error('first_name') <div class="text-red-500 text-sm">{{ $message }}</div> @enderror
                         </div>
-
-                        <!-- Nama Belakang -->
                         <div>
                             <label for="last_name" class="block text-gray-700 dark:text-white mb-1">Nama Belakang</label>
                             <input id="last_name" type="text" wire:model="last_name"
@@ -29,7 +26,6 @@
                         </div>
                     </div>
 
-                    <!-- Nomor HP -->
                     <div class="mt-4">
                         <label for="phone" class="block text-gray-700 dark:text-white mb-1">Nomor HP</label>
                         <input id="phone" type="text" wire:model="phone"

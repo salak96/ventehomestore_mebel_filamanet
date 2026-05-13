@@ -32,7 +32,7 @@
           <img src="{{ url('storage', $category->image) }}"
                alt="{{ $category->name }}"
                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.04]"
-               onerror="this.src='https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=800&auto=format&fit=crop';">
+               onerror="this.src='{{ asset('images/onlinetv.jpg') }}';">
           <!-- Overlay gradient ringan saat hover -->
           <div class="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-gradient-to-t from-black/20 via-black/5 to-transparent"></div>
         </div>

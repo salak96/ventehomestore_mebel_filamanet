@@ -9,7 +9,7 @@ class InvoiceController extends Controller
 {
     public function generate($order_id)
     {
-        $order = Order::with(['items.product', 'address', 'user'])->findOrFail($order_id);
+        $order = Order::with(['items.product', 'user'])->findOrFail($order_id);
 
         if ($order->user_id !== auth()->id()) {
             abort(403);

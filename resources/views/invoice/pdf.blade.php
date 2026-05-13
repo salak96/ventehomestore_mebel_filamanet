@@ -115,45 +115,12 @@
 
     <div class="info">
         <table>
-            <tr>
-                <td>
-                    <table>
-                        <tr>
-                            <td class="label">Invoice No</td>
-                            <td>: {{ $order->id }}</td>
-                        </tr>
-                        <tr>
-                            <td class="label">Tanggal</td>
-                            <td>: {{ $order->created_at->format('d F Y') }}</td>
-                        </tr>
-                        <tr>
-                            <td class="label">Status</td>
-                            <td>: {{ ucfirst($order->status) }}</td>
-                        </tr>
-                        <tr>
-                            <td class="label">Pembayaran</td>
-                            <td>: {{ ucfirst($order->payment_status) }}</td>
-                        </tr>
-                    </table>
-                </td>
-                <td>
-                    <table>
-                        <tr>
-                            <td class="label">Kepada</td>
-                            <td>: {{ $order->address->full_name }}</td>
-                        </tr>
-                        <tr>
-                            <td class="label">Telepon</td>
-                            <td>: {{ $order->address->phone }}</td>
-                        </tr>
-                        <tr>
-                            <td class="label">Alamat</td>
-                            <td>: {{ $order->address->street_address }}, {{ $order->address->city }},
-                                {{ $order->address->state }} {{ $order->address->zip_code }}</td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
+            <tr><td class="label">Invoice No</td><td>: {{ $order->id }}</td></tr>
+            <tr><td class="label">Tanggal</td><td>: {{ $order->created_at->format('d F Y') }}</td></tr>
+            <tr><td class="label">Status</td><td>: {{ ucfirst($order->status) }}</td></tr>
+            <tr><td class="label">Pembayaran</td><td>: {{ ucfirst($order->payment_status) }}</td></tr>
+            <tr><td class="label">Pelanggan</td><td>: {{ $order->customer_name }}</td></tr>
+            <tr><td class="label">Telepon</td><td>: {{ $order->customer_phone }}</td></tr>
         </table>
     </div>
 

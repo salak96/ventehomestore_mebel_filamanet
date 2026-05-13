@@ -210,7 +210,7 @@
                                             src="{{ $imgUrl }}"
                                             alt="{{ $product->name }}"
                                             class="w-full h-full object-cover transform transition-transform duration-300 group-hover:scale-[1.03]"
-                                            onerror="this.src='https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=800&auto=format&fit=crop';">
+                                            onerror="this.src='{{ asset('images/onlinetv.jpg') }}';">
                                     </div>
                                 </a>
 

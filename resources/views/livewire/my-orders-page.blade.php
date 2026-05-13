@@ -33,7 +33,7 @@
                                     $payment_status = '';
                                     if ($order->status == 'new') {
                                         $status =
-                                            '<span class="bg-blue-500 py-1 px-3 rounded text-white shadow">New</span>';
+                                            '<span class="bg-red-500 py-1 px-3 rounded text-white shadow">New</span>';
                                     }
                                     if ($order->status == 'processing') {
                                         $status =
@@ -81,7 +81,7 @@
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                                         {!! $payment_status !!}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                        {{ Number::currency($order->grand_total, 'IDR') }}</td>
+                                        {{ 'Rp ' . number_format($order->grand_total, 0, ',', '.') }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
                                         <a href="/my-orders/{{ $order->id }}/pdf"
                                             class="bg-teal-600 text-white py-2 px-4 rounded-md hover:bg-teal-500">View

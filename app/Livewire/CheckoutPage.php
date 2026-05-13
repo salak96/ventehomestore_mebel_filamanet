@@ -81,29 +81,25 @@ class CheckoutPage extends Component
             return;
         }
 
-        $order = Order::create([
-            'user_id'        => auth()->id(),
-            'payment_method' => $this->payment_method,
-            'grand_total'    => $this->grand_total,
-        ]);
-
-        $order->address()->create([
-            'first_name'     => $this->first_name,
-            'last_name'      => $this->last_name,
-            'phone'          => $this->phone,
-        ]);
-
-        foreach ($this->cart_items as $item) {
-            $order->items()->create([
-                'product_id'   => $item['product_id'],
-                'name'         => $item['name'],
-                'quantity'     => $item['quantity'],
-                'unit_amount'  => $item['unit_amount'],
-                'total_amount' => $item['total_amount'],
+            $order = Order::create([
+                'user_id'        => auth()->id(),
+                'customer_name'  => trim($this->first_name . ' ' . $this->last_name),
+                'customer_phone' => $this->phone,
+                'payment_method' => $this->payment_method,
+                'grand_total'    => $this->grand_total,
             ]);
-        }
 
-        CartManagement::clearCartItems(); // ✅ hapus keranjang
+            foreach ($this->cart_items as $item) {
+                $order->items()->create([
+                    'product_id'   => $item['product_id'],
+                    'name'         => $item['name'],
+                    'quantity'     => $item['quantity'],
+                    'unit_amount'  => $item['unit_amount'],
+                    'total_amount' => $item['total_amount'],
+                ]);
+            }
+
+            CartManagement::clearCartItems();
     }
 
     public function saveAndSendWhatsapp()
@@ -117,14 +113,10 @@ class CheckoutPage extends Component
 
         $order = Order::create([
             'user_id'        => auth()->id(),
+            'customer_name'  => trim($this->first_name . ' ' . $this->last_name),
+            'customer_phone' => $this->phone,
             'grand_total'    => $this->grand_total,
             'payment_method' => $this->payment_method,
-        ]);
-
-        $order->address()->create([
-            'first_name'     => $this->first_name,
-            'last_name'      => $this->last_name,
-            'phone'          => $this->phone,
         ]);
 
         foreach ($this->cart_items as $item) {
@@ -154,6 +146,6 @@ class CheckoutPage extends Component
 
         $this->dispatch('open-whatsapp', $waUrl);
 
-        CartManagement::clearCartItems(); // ✅ hapus keranjang setelah pesan WA
+        CartManagement::clearCartItems();
     }
 }

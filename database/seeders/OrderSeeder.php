@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Address;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
@@ -55,12 +54,13 @@ class OrderSeeder extends Seeder
                 $total += $qty * $unitPrice;
             }
 
-            $city = $cities[array_rand($cities)];
             $firstName = ['Budi', 'Siti', 'Ahmad', 'Dewi', 'Rudi', 'Rina', 'Agus', 'Mega', 'Doni', 'Indah'][array_rand(['Budi', 'Siti', 'Ahmad', 'Dewi', 'Rudi', 'Rina', 'Agus', 'Mega', 'Doni', 'Indah'])];
             $lastName = ['Santoso', 'Rahmawati', 'Fauzi', 'Lestari', 'Hermawan', 'Fitriani', 'Wijaya', 'Putri', 'Prasetyo', 'Permata'][array_rand(['Santoso', 'Rahmawati', 'Fauzi', 'Lestari', 'Hermawan', 'Fitriani', 'Wijaya', 'Putri', 'Prasetyo', 'Permata'])];
 
             $orders[] = [
                 'user_id'         => $userId,
+                'customer_name'   => "$firstName $lastName",
+                'customer_phone'  => '08' . rand(1000000000, 9999999999),
                 'grand_total'     => $total,
                 'payment_method'  => $payments[array_rand($payments)],
                 'payment_status'  => $status === 'cancelled' ? 'failed' : 'paid',
@@ -72,15 +72,6 @@ class OrderSeeder extends Seeder
                 'created_at'      => $date,
                 'updated_at'      => $date,
                 'items'           => $items,
-                'address'         => [
-                    'first_name'     => $firstName,
-                    'last_name'      => $lastName,
-                    'phone'          => '08' . rand(1000000000, 9999999999),
-                    'street_address' => 'Jl. ' . ['Merdeka', 'Sudirman', 'Ahmad Yani', 'Diponegoro', 'Gatot Subroto'][array_rand(['Merdeka', 'Sudirman', 'Ahmad Yani', 'Diponegoro', 'Gatot Subroto'])] . ' No. ' . rand(1, 200),
-                    'city'           => $city,
-                    'state'          => $city === 'Jakarta' ? 'DKI Jakarta' : 'Jawa Barat',
-                    'zip_code'       => rand(10000, 99999),
-                ],
             ];
         }
 
@@ -102,8 +93,6 @@ class OrderSeeder extends Seeder
             foreach ($o['items'] as $item) {
                 $order->items()->create($item);
             }
-
-            $order->address()->create($o['address']);
         }
     }
 }

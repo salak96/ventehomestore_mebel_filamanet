@@ -3,10 +3,8 @@
 namespace App\Models;
 
 use App\Models\User;
-use App\Models\Address;
 use App\Models\OrderItem;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,6 +15,8 @@ class Order extends Model
 
     protected $fillable = [
         'user_id',
+        'customer_name',
+        'customer_phone',
         'grand_total',
         'payment_method',
         'payment_status',
@@ -35,10 +35,5 @@ class Order extends Model
     public function items()
     {
         return $this->hasMany(OrderItem::class);
-    }
-
-    public function address()
-    {
-        return $this->hasOne(Address::class);
     }
 }
