@@ -9,12 +9,12 @@
 <div class="w-full max-w-[85rem] py-10 px-4 sm:px-6 lg:px-8 mx-auto">
 
     <!-- Header / Toolbar -->
-    <div class="mb-6 rounded-xl bg-gradient-to-r from-amber-100 to-orange-50 border border-amber-200 px-4 py-4 sm:py-6">
+    <div class="mb-6 rounded-xl bg-gradient-to-r from-teal-50 to-emerald-50 border border-teal-200 px-4 py-4 sm:py-6">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
                 <h2 class="text-2xl sm:text-3xl font-bold text-gray-800">Katalog Produk</h2>
                 <p class="text-gray-600 mt-1">
-                    Temukan furnitur bergaya dan tahan lama untuk rumah & kantor Anda.
+                    Temukan firmware STB, custom ROM, dan produk digital terbaru.
                 </p>
             </div>
 
@@ -27,8 +27,8 @@
                         <input
                             type="text"
                             wire:model.live.debounce.500ms="search"
-                            placeholder="Cari produk… (nama, deskripsi)"
-                            class="w-64 sm:w-72 bg-white border border-amber-200 rounded-lg px-9 py-2 focus:outline-none focus:ring-2 focus:ring-amber-400 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-200"
+                            placeholder="Cari produk…"
+                            class="w-64 sm:w-72 bg-white border border-teal-200 rounded-lg px-9 py-2 focus:outline-none focus:ring-2 focus:ring-teal-400 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-200"
                             aria-label="Cari produk">
 
                         <svg class="absolute left-2.5 top-2.5 w-4 h-4 text-gray-400" xmlns="http://www.w3.org/2000/svg"
@@ -40,7 +40,7 @@
                         <!-- Tombol clear -->
                         @if (!empty($search))
                             <button type="button" wire:click="$set('search','')"
-                                    class="absolute right-2.5 top-2 inline-flex items-center justify-center w-6 h-6 rounded hover:bg-amber-100 text-gray-500"
+                                    class="absolute right-2.5 top-2 inline-flex items-center justify-center w-6 h-6 rounded hover:bg-teal-100 text-gray-500"
                                     aria-label="Bersihkan pencarian" title="Bersihkan">&times;</button>
                         @endif
                     </div>
@@ -51,14 +51,14 @@
                 <!-- Sort -->
                 <select
                     wire:model.live="sort"
-                    class="block w-48 text-sm sm:text-base bg-white border border-amber-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-amber-400 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300">
+                    class="block w-48 text-sm sm:text-base bg-white border border-teal-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-400 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300">
                     <option value="latest">Urutkan: Terbaru</option>
                     <option value="price">Urutkan: Harga</option>
                 </select>
 
                 <!-- Reset Filter -->
                 <a href="/products"
-                   class="inline-flex items-center text-sm font-medium px-3 py-2 rounded-lg border border-amber-300 text-amber-700 bg-amber-50 hover:bg-amber-100 dark:border-gray-700 dark:text-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700">
+                   class="inline-flex items-center text-sm font-medium px-3 py-2 rounded-lg border border-teal-300 text-teal-700 bg-teal-50 hover:bg-teal-100 dark:border-gray-700 dark:text-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700">
                     Reset Filter
                 </a>
             </div>
@@ -80,9 +80,9 @@
                     <div class="sticky top-6 space-y-5">
 
                         <!-- Categories -->
-                        <div class="p-5 bg-white border border-amber-200 rounded-2xl shadow-sm dark:bg-gray-900 dark:border-gray-800">
+                        <div class="p-5 bg-white border border-teal-200 rounded-2xl shadow-sm dark:bg-gray-900 dark:border-gray-800">
                             <h3 class="text-xl font-bold text-gray-800 dark:text-gray-200">Kategori</h3>
-                            <div class="mt-2 w-16 h-1 rounded bg-amber-400"></div>
+                            <div class="mt-2 w-16 h-1 rounded bg-teal-400"></div>
 
                             <ul class="mt-5 space-y-3">
                                 @foreach ($categories as $category)
@@ -90,8 +90,8 @@
                                         <label for="cat-{{ $category->slug }}" class="group flex items-center gap-3 cursor-pointer">
                                             <input type="checkbox" id="cat-{{ $category->slug }}"
                                                    value="{{ $category->id }}" wire:model.live="selected_categories"
-                                                   class="peer size-4 accent-amber-600 rounded border-gray-300 focus:ring-amber-400">
-                                            <span class="text-base text-gray-700 group-hover:text-amber-700 dark:text-gray-300 dark:group-hover:text-gray-100">
+                                                   class="peer size-4 accent-teal-600 rounded border-gray-300 focus:ring-teal-400">
+                                            <span class="text-base text-gray-700 group-hover:text-teal-700 dark:text-gray-300 dark:group-hover:text-gray-100">
                                                 {{ $category->name }}
                                             </span>
                                         </label>
@@ -101,9 +101,9 @@
                         </div>
 
                         <!-- Brand -->
-                        <div class="p-5 bg-white border border-amber-200 rounded-2xl shadow-sm dark:bg-gray-900 dark:border-gray-800">
+                        <div class="p-5 bg-white border border-teal-200 rounded-2xl shadow-sm dark:bg-gray-900 dark:border-gray-800">
                             <h3 class="text-xl font-bold text-gray-800 dark:text-gray-200">Merek</h3>
-                            <div class="mt-2 w-16 h-1 rounded bg-amber-400"></div>
+                            <div class="mt-2 w-16 h-1 rounded bg-teal-400"></div>
 
                             <ul class="mt-5 grid grid-cols-1 gap-3">
                                 @foreach ($brands as $brand)
@@ -111,8 +111,8 @@
                                         <label for="brand-{{ $brand->slug }}" class="group inline-flex items-center gap-3 cursor-pointer">
                                             <input type="checkbox" id="brand-{{ $brand->slug }}"
                                                    value="{{ $brand->id }}" wire:model.live="selected_brands"
-                                                   class="peer size-4 accent-amber-600 rounded border-gray-300 focus:ring-amber-400">
-                                            <span class="text-base text-gray-700 group-hover:text-amber-700 dark:text-gray-300 dark:group-hover:text-gray-100">
+                                                   class="peer size-4 accent-teal-600 rounded border-gray-300 focus:ring-teal-400">
+                                            <span class="text-base text-gray-700 group-hover:text-teal-700 dark:text-gray-300 dark:group-hover:text-gray-100">
                                                 {{ $brand->name }}
                                             </span>
                                         </label>
@@ -122,22 +122,22 @@
                         </div>
 
                         <!-- Status -->
-                        <div class="p-5 bg-white border border-amber-200 rounded-2xl shadow-sm dark:bg-gray-900 dark:border-gray-800">
+                        <div class="p-5 bg-white border border-teal-200 rounded-2xl shadow-sm dark:bg-gray-900 dark:border-gray-800">
                             <h3 class="text-xl font-bold text-gray-800 dark:text-gray-200">Status Produk</h3>
-                            <div class="mt-2 w-16 h-1 rounded bg-amber-400"></div>
+                            <div class="mt-2 w-16 h-1 rounded bg-teal-400"></div>
 
                             <ul class="mt-5 space-y-3">
                                 <li>
                                     <label class="flex items-center gap-3 cursor-pointer">
                                         <input type="checkbox" wire:model.live="featured"
-                                               class="size-4 accent-amber-600 rounded border-gray-300 focus:ring-amber-400">
+                                               class="size-4 accent-teal-600 rounded border-gray-300 focus:ring-teal-400">
                                         <span class="text-base text-gray-700 dark:text-gray-300">Produk Unggulan</span>
                                     </label>
                                 </li>
                                 <li>
                                     <label class="flex items-center gap-3 cursor-pointer">
                                         <input type="checkbox" wire:model.live="onSale"
-                                               class="size-4 accent-amber-600 rounded border-gray-300 focus:ring-amber-400">
+                                               class="size-4 accent-teal-600 rounded border-gray-300 focus:ring-teal-400">
                                         <span class="text-base text-gray-700 dark:text-gray-300">Sedang Diskon</span>
                                     </label>
                                 </li>
@@ -145,9 +145,9 @@
                         </div>
 
                         <!-- Price -->
-                        <div class="p-5 bg-white border border-amber-200 rounded-2xl shadow-sm dark:bg-gray-900 dark:border-gray-800">
+                        <div class="p-5 bg-white border border-teal-200 rounded-2xl shadow-sm dark:bg-gray-900 dark:border-gray-800">
                             <h3 class="text-xl font-bold text-gray-800 dark:text-gray-200">Harga</h3>
-                            <div class="mt-2 w-16 h-1 rounded bg-amber-400"></div>
+                            <div class="mt-2 w-16 h-1 rounded bg-teal-400"></div>
 
                             <div class="mt-5">
                                 <input
@@ -155,12 +155,12 @@
                                     wire:model.live="price_range"
                                     max="5000000"
                                     step="100000"
-                                    class="w-full h-2 bg-amber-100 rounded-lg appearance-none cursor-pointer">
+                                    class="w-full h-2 bg-teal-100 rounded-lg appearance-none cursor-pointer">
                                 <div class="mt-3 flex items-center justify-between text-sm">
-                                    <span class="inline-flex items-center gap-1 font-semibold text-amber-700 bg-amber-50 px-2 py-1 rounded">
+                                    <span class="inline-flex items-center gap-1 font-semibold text-teal-700 bg-teal-50 px-2 py-1 rounded">
                                         {{ $rupiah($price_range) }}
                                     </span>
-                                    <span class="inline-flex items-center gap-1 font-semibold text-amber-700 bg-amber-50 px-2 py-1 rounded">
+                                    <span class="inline-flex items-center gap-1 font-semibold text-teal-700 bg-teal-50 px-2 py-1 rounded">
                                         {{ $rupiah(5000000) }}
                                     </span>
                                 </div>
@@ -179,7 +179,7 @@
                         @foreach ($products as $product)
                             <div
                                 livewire:key="prod-{{ $product->id }}"
-                                class="group relative bg-white border border-amber-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all dark:bg-gray-900 dark:border-gray-800">
+                                class="group relative bg-white border border-teal-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all dark:bg-gray-900 dark:border-gray-800">
 
                                 <!-- Badge -->
                                 <div class="absolute z-10 left-3 top-3 flex flex-col gap-2">
@@ -192,7 +192,7 @@
                                     @endisset
                                     @isset($product->featured)
                                         @if ($product->featured || (!empty($featured) && $featured))
-                                            <span class="inline-flex items-center text-[11px] font-semibold px-2 py-1 rounded-full bg-amber-100 text-amber-700">
+                                            <span class="inline-flex items-center text-[11px] font-semibold px-2 py-1 rounded-full bg-teal-100 text-teal-700">
                                                 Unggulan
                                             </span>
                                         @endif
@@ -242,7 +242,7 @@
                                 <div class="px-4 pb-4">
                                     <button
                                         wire:click.prevent="addToCart({{ $product->id }})"
-                                        class="w-full inline-flex items-center justify-center gap-2 text-sm font-semibold rounded-xl border border-transparent bg-amber-600 text-white py-2.5 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-400 disabled:opacity-50">
+                                        class="w-full inline-flex items-center justify-center gap-2 text-sm font-semibold rounded-xl border border-transparent bg-teal-600 text-white py-2.5 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-400 disabled:opacity-50">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="currentColor" viewBox="0 0 16 16">
                                             <path d="M0 1.5A.5.5 0 0 1 .5 1H2l.5 2H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.4.472L4.4 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.49-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
                                         </svg>
@@ -260,7 +260,7 @@
                         ($products instanceof \Illuminate\Pagination\LengthAwarePaginator && $products->count() === 0) ||
                         (is_iterable($products) && count($products) === 0)
                     )
-                        <div class="mt-10 text-center bg-white border border-amber-200 rounded-2xl p-10 dark:bg-gray-900 dark:border-gray-800">
+                        <div class="mt-10 text-center bg-white border border-teal-200 rounded-2xl p-10 dark:bg-gray-900 dark:border-gray-800">
                             <p class="text-gray-600 dark:text-gray-300">Produk tidak ditemukan. Coba ubah filter atau kata kunci.</p>
                         </div>
                     @endif

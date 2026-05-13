@@ -39,8 +39,8 @@
             {{-- Thumbnail: desktop (grid) --}}
             <div class="hidden md:grid grid-cols-4 gap-3">
               @foreach ($imageUrls as $idx => $src)
-                <button type="button"
-                        class="relative aspect-square overflow-hidden rounded-xl bg-white border border-amber-200"
+                        <button type="button"
+                        class="relative aspect-square overflow-hidden rounded-xl bg-white border border-teal-200"
                         @click="i={{ $idx }}">
                   <img src="{{ $src }}"
                        alt="Thumbnail {{ $idx + 1 }} - {{ $products->name ?? 'Produk' }}"
@@ -48,7 +48,7 @@
                        loading="lazy"
                        onerror="this.onerror=null;this.src='{{ asset('images/default.png') }}';">
                   <span class="pointer-events-none absolute inset-0 rounded-xl"
-                        :class="i==={{ $idx }} ? 'ring-2 ring-amber-500' : 'ring-1 ring-transparent'"></span>
+                        :class="i==={{ $idx }} ? 'ring-2 ring-teal-500' : 'ring-1 ring-transparent'"></span>
                 </button>
               @endforeach
             </div>
@@ -58,7 +58,7 @@
               <div class="flex gap-3 snap-x snap-mandatory">
                 @foreach ($imageUrls as $idx => $src)
                   <button type="button"
-                          class="relative min-w-20 w-20 aspect-square overflow-hidden rounded-xl bg-white border border-amber-200 snap-start"
+                          class="relative min-w-20 w-20 aspect-square overflow-hidden rounded-xl bg-white border border-teal-200 snap-start"
                           @click="i={{ $idx }}">
                     <img src="{{ $src }}"
                          alt="Thumb {{ $idx + 1 }} - {{ $products->name ?? 'Produk' }}"
@@ -66,7 +66,7 @@
                          loading="lazy"
                          onerror="this.onerror=null;this.src='{{ asset('images/default.png') }}';">
                     <span class="pointer-events-none absolute inset-0 rounded-xl"
-                          :class="i==={{ $idx }} ? 'ring-2 ring-amber-500' : 'ring-1 ring-transparent'"></span>
+                          :class="i==={{ $idx }} ? 'ring-2 ring-teal-500' : 'ring-1 ring-transparent'"></span>
                   </button>
                 @endforeach
               </div>
@@ -121,7 +121,7 @@
             {{-- Tombol Tambah ke Keranjang --}}
             <div class="flex flex-wrap items-center gap-3">
               <button wire:click="addToCart({{ $products->id }})"
-                      class="w-full sm:w-auto px-6 py-3 rounded-xl bg-amber-600 text-white font-semibold hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-400">
+                      class="w-full sm:w-auto px-6 py-3 rounded-xl bg-teal-600 text-white font-semibold hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-400">
                 <span wire:loading.remove wire:target="addToCart({{ $products->id }})">Tambah ke Keranjang</span>
                 <span wire:loading wire:target="addToCart({{ $products->id }})">Menambahkan…</span>
               </button>

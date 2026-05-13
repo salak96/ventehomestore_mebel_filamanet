@@ -11,6 +11,9 @@ use App\Livewire\MyOrdersPage;
 use App\Livewire\DetailOrderPage;
 use App\Livewire\CancelPage;
 use App\Livewire\SuccesPage;
+use App\Livewire\AboutPage;
+use App\Livewire\CaraOrderPage;
+use App\Livewire\FaqPage;
 
 use App\Livewire\Auth\LoginPage;
 use App\Livewire\Auth\RegisterPage;
@@ -20,14 +23,15 @@ use App\Livewire\Auth\MyAccountPage;
 
 // --- Public ---
 Route::get('/', HomePage::class)->name('home');
-Route::get('/', HomePage::class)->name('home');
-Route::get('/categories', CategoriesPage::class)->name('categories');   // <-- tambah nama
+Route::get('/categories', CategoriesPage::class)->name('categories');
 Route::get('/products', ProductsPage::class)->name('products.index');
 Route::get('/products/{slug}', ProductDetailPage::class)->name('products.show');
-Route::get('/cart', CartPage::class)->name('cart'); // (opsional, biar navbar gampang)
+Route::get('/cart', CartPage::class)->name('cart');
 
-Route::get('/products', ProductsPage::class)->name('products.index');
-Route::get('/products/{slug}', ProductDetailPage::class)->name('products.show');
+// --- Info Pages ---
+Route::get('/about', AboutPage::class)->name('about');
+Route::get('/cara-order', CaraOrderPage::class)->name('cara-order');
+Route::get('/faq', FaqPage::class)->name('faq');
 
 // --- Guest only (belum login) ---
 Route::middleware('guest')->group(function () {
@@ -39,7 +43,6 @@ Route::middleware('guest')->group(function () {
 
 // --- Auth only (sudah login) ---
 Route::middleware('auth')->group(function () {
-    // Akun Saya — Pindah ke sini!
     Route::get('/my-account', MyAccountPage::class)->name('my-account');
 
     Route::get('/checkout', CheckoutPage::class)->name('checkout');
@@ -49,7 +52,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/success', SuccesPage::class)->name('success');
     Route::get('/cancel', CancelPage::class)->name('cancel');
 
-    // Logout sebaiknya POST untuk aman (CSRF)
     Route::post('/logout', function () {
         auth()->logout();
         request()->session()->invalidate();

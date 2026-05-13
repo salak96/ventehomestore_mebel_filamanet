@@ -9,7 +9,7 @@ use App\Helpers\CartManagement;
 use App\Livewire\Partials\Navbar;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
-#[Title('Product detail - Ventehomestore')]
+#[Title('Detail Produk - AndroidStore')]
 class ProductDetailPage extends Component
 {
     use LivewireAlert;

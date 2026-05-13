@@ -8,7 +8,7 @@
             <div class="md:col-span-12 lg:col-span-8 col-span-12">
                 <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
                     <h2 class="text-xl font-bold underline text-gray-700 dark:text-white mb-2">
-                        Alamat Pengiriman
+                        Data Pembeli
                     </h2>
 
                     <div class="grid grid-cols-2 gap-4">
@@ -37,49 +37,16 @@
                         @error('phone') <div class="text-red-500 text-sm">{{ $message }}</div> @enderror
                     </div>
 
-                    <!-- Alamat Lengkap -->
-                    <div class="mt-4">
-                        <label for="street_address" class="block text-gray-700 dark:text-white mb-1">Alamat Lengkap</label>
-                        <input id="street_address" type="text" wire:model="street_address"
-                            class="w-full rounded-lg border @error('street_address') border-red-500 @enderror py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none">
-                        @error('street_address') <div class="text-red-500 text-sm">{{ $message }}</div> @enderror
-                    </div>
-
-                    <!-- Kota -->
-                    <div class="mt-4">
-                        <label for="city" class="block text-gray-700 dark:text-white mb-1">Kota</label>
-                        <input id="city" type="text" wire:model="city"
-                            class="w-full rounded-lg border @error('city') border-red-500 @enderror py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none">
-                        @error('city') <div class="text-red-500 text-sm">{{ $message }}</div> @enderror
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4 mt-4">
-                        <!-- Provinsi -->
-                        <div>
-                            <label for="state" class="block text-gray-700 dark:text-white mb-1">Provinsi</label>
-                            <input id="state" type="text" wire:model="state"
-                                class="w-full rounded-lg border @error('state') border-red-500 @enderror py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none">
-                            @error('state') <div class="text-red-500 text-sm">{{ $message }}</div> @enderror
-                        </div>
-
-                        <!-- Kode Pos -->
-                        <div>
-                            <label for="zip_code" class="block text-gray-700 dark:text-white mb-1">Kode Pos</label>
-                            <input id="zip_code" type="text" wire:model="zip_code"
-                                class="w-full rounded-lg border @error('zip_code') border-red-500 @enderror py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none">
-                            @error('zip_code') <div class="text-red-500 text-sm">{{ $message }}</div> @enderror
-                        </div>
-                    </div>
-
                     <!-- Metode Pembayaran -->
                     <div class="text-lg font-semibold mt-6 mb-4">Pilih Metode Pembayaran</div>
                     <ul class="grid w-full gap-6 md:grid-cols-2">
                         <li>
-                            <input class="hidden peer" type="radio" id="cod" value="cod" wire:model="payment_method" />
-                            <label for="cod"
-                                class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-blue-600 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:text-gray-300 dark:hover:bg-gray-700">
+                            <input class="hidden peer" type="radio" id="qris" value="qris" wire:model="payment_method" />
+                            <label for="qris"
+                                class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-teal-600 peer-checked:text-teal-600 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:text-gray-300 dark:hover:bg-gray-700">
                                 <div class="block">
-                                    <div class="w-full text-lg font-semibold">Bayar di Tempat (COD)</div>
+                                    <div class="w-full text-lg font-semibold">QRIS</div>
+                                    <div class="text-sm">Bayar pakai QRIS (GoPay, OVO, Dana, dll)</div>
                                 </div>
                             </label>
                             @error('payment_method') <div class="text-red-500 text-sm">{{ $message }}</div> @enderror
@@ -88,9 +55,10 @@
                         <li>
                             <input class="hidden peer" type="radio" id="stripe" value="stripe" wire:model="payment_method" />
                             <label for="stripe"
-                                class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-blue-600 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:text-gray-300 dark:hover:bg-gray-700">
+                                class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-teal-600 peer-checked:text-teal-600 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:text-gray-300 dark:hover:bg-gray-700">
                                 <div class="block">
                                     <div class="w-full text-lg font-semibold">Transfer Bank</div>
+                                    <div class="text-sm">BCA, Mandiri, BRI, BNI</div>
                                 </div>
                             </label>
                             @error('payment_method') <div class="text-red-500 text-sm">{{ $message }}</div> @enderror

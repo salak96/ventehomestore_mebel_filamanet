@@ -11,13 +11,16 @@ class BrandSeeder extends Seeder
     public function run(): void
     {
         $items = [
-            ['name' => 'Informa',     'image' => 'brands/informa.png'],
-            ['name' => 'IKEA',        'image' => 'brands/ikea.png'],
-            ['name' => 'Olympic',     'image' => 'brands/olympic.png'],
-            ['name' => 'Vivere',      'image' => 'brands/vivere.png'],
-            ['name' => 'iFurnholic',  'image' => 'brands/ifurnholic.png'],
-            ['name' => 'Ace',         'image' => 'brands/ace.png'],
-            ['name' => 'Mabelio',     'image' => 'brands/mabelio.png'],
+            ['name' => 'ZTE',         'image' => 'brands/zte.png'],
+            ['name' => 'Huawei',      'image' => 'brands/huawei.png'],
+            ['name' => 'Akari',       'image' => 'brands/akari.png'],
+            ['name' => 'Evercoss',    'image' => 'brands/evercoss.png'],
+            ['name' => 'Nexmedia',    'image' => 'brands/nexmedia.png'],
+            ['name' => 'Matrix',      'image' => 'brands/matrix.png'],
+            ['name' => 'Bravissimo',  'image' => 'brands/bravissimo.png'],
+            ['name' => 'Advan',       'image' => 'brands/advan.png'],
+            ['name' => 'Xiaomi',      'image' => 'brands/xiaomi.png'],
+            ['name' => 'Realme',      'image' => 'brands/realme.png'],
         ];
 
         foreach ($items as $it) {

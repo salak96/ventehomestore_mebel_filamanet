@@ -14,7 +14,7 @@ use App\Helpers\CartManagement;
 use App\Livewire\Partials\Navbar;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
-#[Title('Products - Ventehomestore')]
+#[Title('Produk - AndroidStore')]
 class ProductsPage extends Component
 {
     use LivewireAlert;

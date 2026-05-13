@@ -6,7 +6,9 @@
             {{-- Brand + Toggle --}}
             <div class="flex items-center justify-between">
                 <a class="flex-none text-xl font-semibold dark:text-white dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                    href="{{ route('home') }}" aria-label="Brand">Ventehomestore</a>
+                    href="{{ route('home') }}" aria-label="Brand">
+                    <span class="text-teal-600">Android</span><span class="text-gray-700 dark:text-gray-300">Store</span>
+                </a>
 
                 <div class="md:hidden">
                     <button type="button"
@@ -42,24 +44,42 @@
 
                         {{-- Beranda --}}
                         <a wire:navigate href="{{ route('home') }}"
-                            class="font-medium {{ request()->routeIs('home') ? 'text-orange-600' : 'text-gray-500' }} hover:text-blue-600 py-3 md:py-6 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+                            class="font-medium {{ request()->routeIs('home') ? 'text-teal-600' : 'text-gray-500' }} hover:text-teal-600 py-3 md:py-6 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
                             aria-current="page">Beranda</a>
 
                         {{-- Kategori --}}
                         <a wire:navigate href="{{ route('categories') }}"
-                            class="font-medium {{ request()->routeIs('categories') ? 'text-orange-600' : 'text-gray-500' }} hover:text-blue-600 py-3 md:py-6 dark:text-gray-400 dark:hover:text-gray-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                            class="font-medium {{ request()->routeIs('categories') ? 'text-teal-600' : 'text-gray-500' }} hover:text-teal-600 py-3 md:py-6 dark:text-gray-400 dark:hover:text-gray-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
                             Kategori
                         </a>
 
                         {{-- Produk --}}
                         <a wire:navigate href="{{ route('products.index') }}"
-                            class="font-medium {{ request()->routeIs('products.*') ? 'text-orange-600' : 'text-gray-500' }} hover:text-blue-600 py-3 md:py-6 dark:text-gray-400 dark:hover:text-gray-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                            class="font-medium {{ request()->routeIs('products.*') ? 'text-teal-600' : 'text-gray-500' }} hover:text-teal-600 py-3 md:py-6 dark:text-gray-400 dark:hover:text-gray-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
                             Produk
                         </a>
 
+                        {{-- Tentang --}}
+                        <a wire:navigate href="{{ route('about') }}"
+                            class="font-medium {{ request()->routeIs('about') ? 'text-teal-600' : 'text-gray-500' }} hover:text-teal-600 py-3 md:py-6 dark:text-gray-400 dark:hover:text-gray-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                            Tentang
+                        </a>
+
+                        {{-- Cara Order --}}
+                        <a wire:navigate href="{{ route('cara-order') }}"
+                            class="font-medium {{ request()->routeIs('cara-order') ? 'text-teal-600' : 'text-gray-500' }} hover:text-teal-600 py-3 md:py-6 dark:text-gray-400 dark:hover:text-gray-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                            Cara Order
+                        </a>
+
+                        {{-- FAQ --}}
+                        <a wire:navigate href="{{ route('faq') }}"
+                            class="font-medium {{ request()->routeIs('faq') ? 'text-teal-600' : 'text-gray-500' }} hover:text-teal-600 py-3 md:py-6 dark:text-gray-400 dark:hover:text-gray-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                            FAQ
+                        </a>
+
                         {{-- Keranjang --}}
-                        <a wire:navigate href="{{ route('cart') ?? '/cart' }}" {{-- fallback jika belum dinamai --}}
-                            class="font-medium flex items-center {{ request()->is('cart') ? 'text-orange-600' : 'text-gray-500' }} hover:text-blue-600 py-3 md:py-6 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                        <a wire:navigate href="{{ route('cart') ?? '/cart' }}"
+                            class="font-medium flex items-center {{ request()->is('cart') ? 'text-teal-600' : 'text-gray-500' }} hover:text-teal-600 py-3 md:py-6 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
                             <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 w-5 h-5 mr-1" fill="none"
                                 viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -67,7 +87,7 @@
                             </svg>
                             <span class="mr-1">Keranjang</span>
                             <span
-                                class="py-0.5 px-1.5 rounded-full text-xs font-medium bg-blue-50 border border-blue-200 text-orange-600">
+                                class="py-0.5 px-1.5 rounded-full text-xs font-medium bg-teal-50 border border-teal-200 text-teal-600">
                                 {{ $total_count ?? 0 }}
                             </span>
                         </a>
@@ -76,7 +96,7 @@
                         @guest
                             <div class="pt-3 md:pt-0">
                                 <a wire:navigate href="{{ route('login') }}"
-                                    class="py-2.5 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                                    class="py-2.5 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-teal-600 text-white hover:bg-teal-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
                                     <svg class="flex-shrink-0 w-4 h-4" xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                         aria-hidden="true">
@@ -93,7 +113,7 @@
                             <div
                                 class="hs-dropdown [--strategy:static] md:[--strategy:fixed] [--adaptive:none] md:[--trigger:hover] md:py-4">
                                 <button type="button"
-                                    class="flex items-center w-full text-gray-500 hover:text-blue-600 font-medium dark:text-gray-400 dark:hover:text-gray-500">
+                                    class="flex items-center w-full text-gray-500 hover:text-teal-600 font-medium dark:text-gray-400 dark:hover:text-gray-500">
                                     {{ auth()->user()->name }}
                                     <svg class="ms-2 w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                                         fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
@@ -104,12 +124,12 @@
                                 <div
                                     class="hs-dropdown-menu transition-[opacity,margin] duration-[0.1ms] md:duration-[150ms] hs-dropdown-open:opacity-100 opacity-0 md:w-48 hidden z-10 bg-white md:shadow-md rounded-lg p-2 dark:bg-gray-800 md:dark:border dark:border-gray-700 dark:divide-gray-700 before:absolute top-full md:border before:-top-5 before:start-0 before:w-full before:h-5">
                                     <a wire:navigate href="{{ route('my-orders.index') }}"
-                                        class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                                        class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-teal-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
                                         Pesanan Saya
                                     </a>
 
                                     <a wire:navigate href="{{ route('my-account') }}"
-                                        class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                                        class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-teal-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
                                         Akun Saya
                                     </a>
 
@@ -117,7 +137,7 @@
                                     <form method="POST" action="{{ route('logout') }}">
                                         @csrf
                                         <button type="submit"
-                                            class="w-full text-left flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                                            class="w-full text-left flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-teal-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
                                             Keluar
                                         </button>
                                     </form>

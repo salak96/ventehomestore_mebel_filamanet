@@ -6,111 +6,70 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class ProductSeeder extends Seeder
 {
     public function run(): void
     {
-        // Pastikan kategori & brand sudah ada
-        $categories = Category::pluck('id', 'slug'); // slug => id
-        $brands     = Brand::pluck('id', 'slug');    // slug => id
+        $categories = Category::pluck('id', 'slug');
+        $brands     = Brand::pluck('id', 'slug');
 
-        // --- Contoh beberapa produk kurasi manual ---
         $samples = [
-            [
-                'name'        => 'Sofa L Minimalis Abu',
-                'category'    => 'sofa',
-                'brand'       => 'informa',
-                'price'       => 4500000.00,
-                'images'      => ['products/sofa-l-abu-1.jpg', 'products/sofa-l-abu-2.jpg'],
-                'description' => 'Sofa bentuk L, rangka kayu solid, kain woven, cocok untuk ruang keluarga.',
-                'is_featured' => true,
-                'on_sale'     => false,
-            ],
-            [
-                'name'        => 'Meja Makan Kayu Jati 6 Kursi',
-                'category'    => 'meja',
-                'brand'       => 'vivere',
-                'price'       => 6800000.00,
-                'images'      => ['products/meja-makan-jati-1.jpg'],
-                'description' => 'Set meja makan kayu jati finishing natural, termasuk 6 kursi.',
-                'is_featured' => false,
-                'on_sale'     => true,
-            ],
-            [
-                'name'        => 'Lemari Pakaian 3 Pintu Cermin',
-                'category'    => 'lemari',
-                'brand'       => 'olympic',
-                'price'       => 3750000.00,
-                'images'      => ['products/lemari-3-pintu-1.jpg'],
-                'description' => 'Lemari pakaian 3 pintu dengan cermin dan ruang penyimpanan luas.',
-                'is_featured' => false,
-                'on_sale'     => false,
-            ],
-            [
-                'name'        => 'Tempat Tidur Queen Storage',
-                'category'    => 'tempat-tidur',
-                'brand'       => 'ikea',
-                'price'       => 5200000.00,
-                'images'      => ['products/bed-queen-storage-1.jpg'],
-                'description' => 'Rangka tempat tidur queen dengan laci penyimpanan di bawah.',
-                'is_featured' => true,
-                'on_sale'     => false,
-            ],
+            // Firmware STB
+            ['name' => 'Firmware ZTE B860H V2',           'category' => 'firmware-stb', 'brand' => 'zte',       'price' => 50000,  'featured' => true,  'onsale' => false],
+            ['name' => 'Firmware Huawei HG680P',           'category' => 'firmware-stb', 'brand' => 'huawei',    'price' => 55000,  'featured' => true,  'onsale' => false],
+            ['name' => 'Firmware Akari ATV 2024',          'category' => 'firmware-stb', 'brand' => 'akari',     'price' => 45000,  'featured' => false, 'onsale' => true],
+            ['name' => 'Firmware Evercoss STB One',        'category' => 'firmware-stb', 'brand' => 'evercoss',  'price' => 40000,  'featured' => false, 'onsale' => false],
+            ['name' => 'Firmware Nexmedia NXT-1000',       'category' => 'firmware-stb', 'brand' => 'nexmedia',  'price' => 60000,  'featured' => true,  'onsale' => false],
+            ['name' => 'Firmware Matrix SAT 4K',           'category' => 'firmware-stb', 'brand' => 'matrix',    'price' => 55000,  'featured' => false, 'onsale' => true],
+            ['name' => 'Firmware Bravissimo B1',           'category' => 'firmware-stb', 'brand' => 'bravissimo','price' => 35000,  'featured' => false, 'onsale' => false],
+            ['name' => 'Firmware Advan STB X1',            'category' => 'firmware-stb', 'brand' => 'advan',     'price' => 45000,  'featured' => false, 'onsale' => false],
+            // Custom ROM
+            ['name' => 'Custom ROM PixelOS Xiaomi Redmi 9','category' => 'custom-rom',   'brand' => 'xiaomi',    'price' => 75000,  'featured' => true,  'onsale' => false],
+            ['name' => 'Custom ROM LineageOS Realme 5',    'category' => 'custom-rom',   'brand' => 'realme',    'price' => 80000,  'featured' => true,  'onsale' => false],
+            ['name' => 'Custom ROM EvolutionX Advan G5',   'category' => 'custom-rom',   'brand' => 'advan',     'price' => 65000,  'featured' => false, 'onsale' => true],
+            ['name' => 'Custom ROM crDroid Xiaomi Note 8', 'category' => 'custom-rom',   'brand' => 'xiaomi',    'price' => 70000,  'featured' => false, 'onsale' => false],
+            // Jasa Root
+            ['name' => 'Jasa Root Semua Xiaomi',           'category' => 'jasa-root',    'brand' => 'xiaomi',    'price' => 50000,  'featured' => true,  'onsale' => false],
+            ['name' => 'Jasa Root Realme & Oppo',          'category' => 'jasa-root',    'brand' => 'realme',    'price' => 60000,  'featured' => false, 'onsale' => false],
+            ['name' => 'Jasa Root Samsung & Advan',        'category' => 'jasa-root',    'brand' => 'advan',     'price' => 55000,  'featured' => false, 'onsale' => true],
+            ['name' => 'Jasa Root Huawei & ZTE',           'category' => 'jasa-root',    'brand' => 'huawei',    'price' => 70000,  'featured' => false, 'onsale' => false],
+            // Akun Digital
+            ['name' => 'Akun Netflix Premium 1 Bulan',     'category' => 'akun-digital', 'brand' => 'xiaomi',   'price' => 35000,  'featured' => true,  'onsale' => false],
+            ['name' => 'Akun Spotify Premium 3 Bulan',     'category' => 'akun-digital', 'brand' => 'realme',   'price' => 45000,  'featured' => true,  'onsale' => false],
+            ['name' => 'Akun Canva Pro 1 Bulan',           'category' => 'akun-digital', 'brand' => 'advan',    'price' => 25000,  'featured' => false, 'onsale' => true],
+            ['name' => 'Akun Youtube Premium 1 Bulan',     'category' => 'akun-digital', 'brand' => 'xiaomi',   'price' => 30000,  'featured' => false, 'onsale' => false],
+            ['name' => 'Akun Disney+ Hotstar 1 Bulan',     'category' => 'akun-digital', 'brand' => 'realme',   'price' => 20000,  'featured' => false, 'onsale' => false],
+            // Template Kreatif
+            ['name' => 'Template CapCut Aesthetic 50+',    'category' => 'template-kreatif','brand' => 'xiaomi','price' => 15000,  'featured' => true,  'onsale' => false],
+            ['name' => 'Template Canva Presentation Pro',  'category' => 'template-kreatif','brand' => 'realme','price' => 20000,  'featured' => false, 'onsale' => true],
+            ['name' => 'Template CapCut Viral 2024',       'category' => 'template-kreatif','brand' => 'advan', 'price' => 25000,  'featured' => false, 'onsale' => false],
+            ['name' => 'Template Canva Social Media',      'category' => 'template-kreatif','brand' => 'xiaomi','price' => 18000,  'featured' => false, 'onsale' => false],
+            // Tools & Utility
+            ['name' => 'Toolkit Flashing USB STB',         'category' => 'tools-utility','brand' => 'zte',      'price' => 85000,  'featured' => true,  'onsale' => false],
+            ['name' => 'Driver Pack All STB',              'category' => 'tools-utility','brand' => 'huawei',   'price' => 30000,  'featured' => false, 'onsale' => false],
+            ['name' => 'USB Serial TTL Converter',         'category' => 'tools-utility','brand' => 'akari',    'price' => 45000,  'featured' => false, 'onsale' => true],
         ];
 
         foreach ($samples as $p) {
-            $categoryId = $categories[$p['category']] ?? null;
-            $brandId    = $brands[$p['brand']] ?? null;
-            if (!$categoryId || !$brandId) {
-                continue;
-            }
+            $catId = $categories[$p['category']] ?? null;
+            $brandId = $brands[$p['brand']] ?? null;
+            if (!$catId || !$brandId) continue;
 
             Product::updateOrCreate(
                 ['slug' => Str::slug($p['name'])],
                 [
-                    'category_id' => $categoryId,
+                    'category_id' => $catId,
                     'brand_id'    => $brandId,
                     'name'        => $p['name'],
-                    'images'      => json_encode($p['images']),
-                    'description' => $p['description'],
+                    'images'      => json_encode(['products/default.png']),
+                    'description' => 'Produk ' . $p['name'] . ' dari AndroidStore. Kualitas terjamin, harga terjangkau.',
                     'price'       => $p['price'],
                     'is_active'   => true,
-                    'is_featured' => (bool) ($p['is_featured'] ?? false),
+                    'is_featured' => $p['featured'],
                     'in_stock'    => true,
-                    'on_sale'     => (bool) ($p['on_sale'] ?? false),
-                ]
-            );
-        }
-
-        // --- Tambahan: generate produk acak agar list ramai ---
-        $faker       = \Faker\Factory::create('id_ID');
-        $catSlugs    = $categories->keys()->values()->all();
-        $brandSlugs  = $brands->keys()->values()->all();
-
-        for ($i = 0; $i < 24; $i++) {
-            $catSlug   = Arr::random($catSlugs);
-            $brandSlug = Arr::random($brandSlugs);
-
-            $name = ucfirst($faker->unique()->words(3, true)) . ' ' . strtoupper($faker->randomLetter);
-
-            Product::updateOrCreate(
-                ['slug' => Str::slug($name . '-' . $i)],
-                [
-                    'category_id' => $categories[$catSlug],
-                    'brand_id'    => $brands[$brandSlug],
-                    'name'        => $name,
-                    'images'      => json_encode([
-                        'products/dummy-' . $faker->numberBetween(1, 6) . '.jpg'
-                    ]),
-                    'description' => $faker->sentence(18),
-                    'price'       => $faker->numberBetween(250000, 8000000),
-                    'is_active'   => true,
-                    'is_featured' => $faker->boolean(15),
-                    'in_stock'    => $faker->boolean(90),
-                    'on_sale'     => $faker->boolean(20),
+                    'on_sale'     => $p['onsale'],
                 ]
             );
         }

@@ -15,14 +15,14 @@
 <div class="w-full max-w-[85rem] py-10 px-4 sm:px-6 lg:px-8 mx-auto">
 
     <!-- Header -->
-    <div class="mb-6 rounded-xl bg-gradient-to-r from-amber-100 to-orange-50 border border-amber-200 px-5 py-6">
+    <div class="mb-6 rounded-xl bg-gradient-to-r from-teal-50 to-emerald-50 border border-teal-200 px-5 py-6">
         <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
             <div>
                 <h1 class="text-3xl sm:text-4xl font-bold text-gray-800">Keranjang Belanja</h1>
                 <p class="mt-1 text-gray-600">Tinjau pesanan Anda sebelum melanjutkan ke pembayaran.</p>
             </div>
             <a href="/products"
-               class="inline-flex items-center gap-2 text-sm font-medium px-3 py-2 rounded-lg border border-amber-300 text-amber-700 bg-amber-50 hover:bg-amber-100">
+               class="inline-flex items-center gap-2 text-sm font-medium px-3 py-2 rounded-lg border border-teal-300 text-teal-700 bg-teal-50 hover:bg-teal-100">
                 ← Lanjut Belanja
             </a>
         </div>
@@ -32,12 +32,12 @@
 
         <!-- Daftar Item -->
         <div class="md:w-3/4">
-            <div class="bg-white rounded-2xl shadow-sm border border-amber-200 overflow-hidden">
+            <div class="bg-white rounded-2xl shadow-sm border border-teal-200 overflow-hidden">
 
                 <!-- Tabel (desktop) -->
                 <div class="hidden md:block overflow-x-auto">
                     <table class="w-full">
-                        <thead class="bg-amber-50">
+                        <thead class="bg-teal-50">
                             <tr class="text-left text-sm text-gray-600">
                                 <th class="px-6 py-3 font-semibold">Produk</th>
                                 <th class="px-6 py-3 font-semibold">Harga Satuan</th>
@@ -46,7 +46,7 @@
                                 <th class="px-6 py-3 font-semibold">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-amber-100">
+                        <tbody class="divide-y divide-teal-100">
                             @forelse ($cart_items as $item)
                                 <tr wire:key="row-{{ $item['product_id'] }}" class="align-top">
                                     <td class="px-6 py-4">
@@ -55,11 +55,11 @@
                                               $img = $item['image'] ?? null;
                                               $imgUrl = $img ? url('storage', $img) : asset('images/default.png');
                                             @endphp
-                                            <img class="h-16 w-16 rounded-lg object-cover border border-amber-100"
+                                            <img class="h-16 w-16 rounded-lg object-cover border border-teal-100"
                                                  src="{{ $imgUrl }}" alt="{{ $item['name'] }}">
                                             <div>
                                                 <a href="/products/{{ $item['slug'] ?? '' }}"
-                                                   class="font-semibold text-gray-800 hover:text-amber-700">
+                                                   class="font-semibold text-gray-800 hover:text-teal-700">
                                                     {{ $item['name'] }}
                                                 </a>
                                                 @isset($item['variant'])
@@ -76,14 +76,14 @@
                                     </td>
 
                                     <td class="px-6 py-4">
-                                        <div class="inline-flex items-center rounded-xl border border-amber-200 overflow-hidden">
+                                        <div class="inline-flex items-center rounded-xl border border-teal-200 overflow-hidden">
                                             <button wire:click="decreaseItem({{ $item['product_id'] }})"
-                                                    class="px-3 py-2 hover:bg-amber-50" aria-label="Kurangi jumlah">
+                                                    class="px-3 py-2 hover:bg-teal-50" aria-label="Kurangi jumlah">
                                                 −
                                             </button>
                                             <span class="px-4 py-2 min-w-8 text-center font-medium">{{ $item['quantity'] }}</span>
                                             <button wire:click="increaseItem({{ $item['product_id'] }})"
-                                                    class="px-3 py-2 hover:bg-amber-50" aria-label="Tambah jumlah">
+                                                    class="px-3 py-2 hover:bg-teal-50" aria-label="Tambah jumlah">
                                                 +
                                             </button>
                                         </div>
@@ -111,11 +111,11 @@
                                 <tr>
                                     <td colspan="5" class="px-6 py-16">
                                         <div class="text-center">
-                                            <div class="mx-auto w-16 h-16 rounded-full bg-amber-50 flex items-center justify-center mb-4">🛒</div>
+                                            <div class="mx-auto w-16 h-16 rounded-full bg-teal-50 flex items-center justify-center mb-4">🛒</div>
                                             <h3 class="text-xl font-semibold text-gray-700">Keranjang masih kosong</h3>
                                             <p class="mt-1 text-gray-500">Yuk, temukan furnitur impianmu.</p>
                                             <a href="/products"
-                                               class="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-amber-600 text-white hover:bg-amber-700">
+                                               class="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-teal-600 text-white hover:bg-teal-700">
                                                 Mulai Belanja
                                             </a>
                                         </div>
@@ -127,7 +127,7 @@
                 </div>
 
                 <!-- Kartu (mobile) -->
-                <div class="md:hidden divide-y divide-amber-100">
+                <div class="md:hidden divide-y divide-teal-100">
                     @forelse ($cart_items as $item)
                         <div class="p-4" wire:key="card-{{ $item['product_id'] }}">
                             <div class="flex gap-4">
@@ -135,7 +135,7 @@
                                   $img = $item['image'] ?? null;
                                   $imgUrl = $img ? url('storage', $img) : asset('images/default.png');
                                 @endphp
-                                <img class="h-20 w-20 rounded-lg object-cover border border-amber-100"
+                                <img class="h-20 w-20 rounded-lg object-cover border border-teal-100"
                                      src="{{ $imgUrl }}" alt="{{ $item['name'] }}">
                                 <div class="min-w-0 flex-1">
                                     <div class="flex items-start justify-between gap-3">
@@ -148,10 +148,10 @@
                                         <span class="font-medium text-gray-800">{{ $rupiah($item['unit_amount']) }}</span>
                                     </div>
                                     <div class="mt-3 flex items-center justify-between">
-                                        <div class="inline-flex items-center rounded-xl border border-amber-200 overflow-hidden">
-                                            <button wire:click="decreaseItem({{ $item['product_id'] }})" class="px-3 py-1.5 hover:bg-amber-50">−</button>
+                                        <div class="inline-flex items-center rounded-xl border border-teal-200 overflow-hidden">
+                                            <button wire:click="decreaseItem({{ $item['product_id'] }})" class="px-3 py-1.5 hover:bg-teal-50">−</button>
                                             <span class="px-4 py-1.5 min-w-8 text-center font-medium">{{ $item['quantity'] }}</span>
-                                            <button wire:click="increaseItem({{ $item['product_id'] }})" class="px-3 py-1.5 hover:bg-amber-50">+</button>
+                                            <button wire:click="increaseItem({{ $item['product_id'] }})" class="px-3 py-1.5 hover:bg-teal-50">+</button>
                                         </div>
                                         <div class="text-right">
                                             <div class="text-xs text-gray-500">Total</div>
@@ -167,7 +167,7 @@
                         <div class="p-8 text-center">
                             <h3 class="text-lg font-semibold text-gray-700">Keranjang masih kosong</h3>
                             <a href="/products"
-                               class="mt-3 inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-amber-600 text-white hover:bg-amber-700">
+                               class="mt-3 inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-teal-600 text-white hover:bg-teal-700">
                                 Mulai Belanja
                             </a>
                         </div>
@@ -179,7 +179,7 @@
 
         <!-- Ringkasan -->
         <div class="md:w-1/4">
-            <div class="bg-white rounded-2xl shadow-sm border border-amber-200 p-6">
+            <div class="bg-white rounded-2xl shadow-sm border border-teal-200 p-6">
                 <h2 class="text-lg font-bold text-gray-800 mb-4">Ringkasan</h2>
 
                 <div class="space-y-2 text-sm">
@@ -206,7 +206,7 @@
 
                 @if ($cart_items && count($cart_items) > 0)
                     <a href="/checkout"
-                       class="mt-4 block text-center text-white font-semibold py-2.5 px-4 rounded-xl bg-amber-600 hover:bg-amber-700">
+                       class="mt-4 block text-center text-white font-semibold py-2.5 px-4 rounded-xl bg-teal-600 hover:bg-teal-700">
                         Lanjut ke Pembayaran
                     </a>
                 @else

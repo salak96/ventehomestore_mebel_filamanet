@@ -8,7 +8,7 @@
                         <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
                             Ingat kata sandi Anda?
                             <a wire:navigate
-                                class="text-orange-600 decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+                                class="text-teal-600 decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
                                 href="/login">
                                 Masuk di sini
                             </a>

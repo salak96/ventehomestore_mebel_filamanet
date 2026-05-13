@@ -8,7 +8,7 @@
                         <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
                             Belum punya akun?
                             <a wire:navigate
-                                class="text-orange-600 decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+                                class="text-teal-600 decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
                                 href="/register">
                                 Daftar di sini
                             </a>

@@ -11,14 +11,12 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         $items = [
-            ['name' => 'Sofa',           'image' => 'categories/sofa.jpg'],
-            ['name' => 'Kursi',          'image' => 'categories/kursi.jpg'],
-            ['name' => 'Meja',           'image' => 'categories/meja.jpg'],
-            ['name' => 'Lemari',         'image' => 'categories/lemari.jpg'],
-            ['name' => 'Tempat Tidur',   'image' => 'categories/tempat-tidur.jpg'],
-            ['name' => 'Rak',            'image' => 'categories/rak.jpg'],
-            ['name' => 'Dekorasi',       'image' => 'categories/dekorasi.jpg'],
-            ['name' => 'Outdoor',        'image' => 'categories/outdoor.jpg'],
+            ['name' => 'Firmware STB',       'image' => 'categories/default.png'],
+            ['name' => 'Custom ROM',         'image' => 'categories/default.png'],
+            ['name' => 'Jasa Root',          'image' => 'categories/default.png'],
+            ['name' => 'Akun Digital',       'image' => 'categories/default.png'],
+            ['name' => 'Template Kreatif',   'image' => 'categories/default.png'],
+            ['name' => 'Tools & Utility',    'image' => 'categories/default.png'],
         ];
 
         foreach ($items as $it) {

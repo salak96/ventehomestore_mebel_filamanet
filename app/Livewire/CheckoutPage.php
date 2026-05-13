@@ -7,10 +7,10 @@ use Livewire\Component;
 use App\Helpers\CartManagement;
 use Livewire\Attributes\Title;
 
-#[Title('Checkout - Vente Home Store')]
+#[Title('Checkout - AndroidStore')]
 class CheckoutPage extends Component
 {
-    public $first_name, $last_name, $phone, $street_address, $city, $state, $zip_code, $payment_method;
+    public $first_name, $last_name, $phone, $payment_method;
     public $cart_items = [];
     public $grand_total = 0;
 
@@ -18,11 +18,7 @@ class CheckoutPage extends Component
         'first_name'     => 'required|string|max:255',
         'last_name'      => 'nullable|string|max:255',
         'phone'          => 'required|string|max:20',
-        'street_address' => 'required|string|max:500',
-        'city'           => 'required|string|max:255',
-        'state'          => 'required|string|max:255',
-        'zip_code'       => 'required|string|max:20',
-        'payment_method' => 'required|in:cod,stripe',
+        'payment_method' => 'required|in:qris,stripe',
     ];
 
     protected $messages = [
@@ -66,10 +62,6 @@ class CheckoutPage extends Component
             'first_name'     => $this->first_name,
             'last_name'      => $this->last_name,
             'phone'          => $this->phone,
-            'street_address' => $this->street_address,
-            'city'           => $this->city,
-            'state'          => $this->state,
-            'zip_code'       => $this->zip_code,
         ]);
 
         foreach ($this->cart_items as $item) {
@@ -99,10 +91,6 @@ class CheckoutPage extends Component
             'first_name'     => $this->first_name,
             'last_name'      => $this->last_name,
             'phone'          => $this->phone,
-            'street_address' => $this->street_address,
-            'city'           => $this->city,
-            'state'          => $this->state,
-            'zip_code'       => $this->zip_code,
         ]);
 
         foreach ($this->cart_items as $item) {
@@ -116,18 +104,17 @@ class CheckoutPage extends Component
         }
 
         // Buat pesan WA
-        $pesan = "📢 Halo Admin, ada pesanan baru!\n\n".
-            "👤 {$this->first_name} {$this->last_name}\n".
-            "📞 {$this->phone}\n".
-            "🏠 {$this->street_address}, {$this->city}, {$this->state}, {$this->zip_code}\n\n".
-            "🛒 Detail Pesanan:\n";
+        $pesan = "*Halo Admin, ada pesanan baru!*\n\n".
+            "*Nama:* {$this->first_name} {$this->last_name}\n".
+            "*No. HP:* {$this->phone}\n\n".
+            "*Detail Pesanan:*\n";
 
         foreach ($this->cart_items as $item) {
-            $pesan .= "- {$item['name']} (x{$item['quantity']}) : Rp ".number_format($item['total_amount'],0,',','.')."\n";
+            $pesan .= "• {$item['name']} (x{$item['quantity']}) : Rp ".number_format($item['total_amount'],0,',','.')."\n";
         }
 
-        $pesan .= "\n💰 Total: Rp ".number_format($this->grand_total,0,',','.').
-                  "\n💳 Metode: {$this->payment_method}";
+        $pesan .=                   "\n*Total:* Rp ".number_format($this->grand_total,0,',','.').
+                  "\n*Metode:* ".($this->payment_method === 'stripe' ? 'Transfer Bank' : 'QRIS');
 
         $waUrl = "https://wa.me/6285642268279?text=".rawurlencode($pesan);
 

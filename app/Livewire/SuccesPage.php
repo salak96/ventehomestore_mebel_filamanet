@@ -9,7 +9,7 @@ use Livewire\Attributes\Url;
 use Stripe\Checkout\Session;
 use Livewire\Attributes\Title;
 
-#[Title('Success - Ventehomestore')]
+#[Title('Success - AndroidStore')]
 class SuccesPage extends Component
 {
     #[Url]
