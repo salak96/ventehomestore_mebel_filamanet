@@ -61,6 +61,13 @@ class OrderResource extends Resource
                             ->searchable()
                             ->required(),
 
+                        TextInput::make('customer_phone')
+                            ->label('Nomor WhatsApp')
+                            ->placeholder('08xxxxxxxxxx')
+                            ->helperText('Nomor WA customer untuk pesan WA')
+                            ->tel()
+                            ->maxLength(20),
+
                         Select::make('payment_method')
                             ->options([
                                 'stripe' => 'Stripe',
@@ -228,6 +235,11 @@ class OrderResource extends Resource
                     ->label('Customer')
                     ->sortable()
                     ->searchable(),
+
+                TextColumn::make('customer_phone')
+                    ->label('No. WA')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
 
                 // Grand total: tampil Rp tanpa desimal
                 TextColumn::make('grand_total')

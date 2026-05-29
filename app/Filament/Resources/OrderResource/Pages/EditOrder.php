@@ -20,9 +20,18 @@ class EditOrder extends EditRecord
         return [
             Actions\ViewAction::make(),
             
+            Action::make('sendWhatsapp')
+                ->label('📱 Kirim via WhatsApp')
+                ->color('success')
+                ->icon('heroicon-o-chat-bubble-left-right')
+                ->action(function () {
+                    $order = $this->record->load(['user', 'items.product']);
+                    $this->sendWhatsappMessage($order);
+                }),
+            
             Action::make('sendEmail')
                 ->label('📧 Kirim Email Manual')
-                ->color('success')
+                ->color('info')
                 ->icon('heroicon-o-envelope')
                 ->requiresConfirmation()
                 ->modalHeading('Konfirmasi Kirim Email')
@@ -50,7 +59,7 @@ class EditOrder extends EditRecord
                         
                         Log::info("Manual: Email order akses dikirim untuk order #{$order->id} ke {$order->user->email}");
                     } catch (\Exception $e) {
-                        Log::error("Manual: Gagal kirim email order #{$order->id}: " . $e->getMessage() . " | SMTP Host: " . config('mail.mailers.smtp.host'));
+                        Log::error("Manual: Gagal kirim email order #{$order->id}: " . $e->getMessage());
                         
                         Notification::make()
                             ->danger()
@@ -62,6 +71,94 @@ class EditOrder extends EditRecord
             
             Actions\DeleteAction::make(),
         ];
+    }
+
+    protected function sendWhatsappMessage($order): void
+    {
+        $phone = $order->customer_phone ?? $order->user->phone ?? null;
+        
+        if (empty($phone)) {
+            Notification::make()
+                ->danger()
+                ->title('Nomor WA Tidak Ada')
+                ->body('Order ini tidak memiliki nomor telepon customer.')
+                ->send();
+            return;
+        }
+
+        // Format nomor ke internasional: 08xx → 628xx
+        $phone = preg_replace('/[^0-9]/', '', $phone);
+        if (str_starts_with($phone, '0')) {
+            $phone = '62' . substr($phone, 1);
+        } elseif (!str_starts_with($phone, '62')) {
+            $phone = '62' . $phone;
+        }
+
+        // Build pesan WA
+        $appName = config('app.name');
+        $message = "📦 *Akun Sudah Dikirim — {$appName}*\n\n";
+        $message .= "Halo *{$order->user->name}*,\nAkun untuk pesananmu sudah siap! 👋\n\n";
+        
+        $message .= "📋 *Order:* #{$order->id}\n";
+        
+        foreach ($order->items as $item) {
+            $product = $item->product;
+            $qtyText = $item->quantity > 1 ? " x{$item->quantity}" : "";
+            $message .= "📦 *Produk:* {$item->name}{$qtyText}\n";
+            
+            if ($product && $product->access_link) {
+                $message .= "🔗 *Link:* {$product->access_link}\n";
+            }
+            if ($product && $product->access_username) {
+                $message .= "👤 *Username:* `{$product->access_username}`\n";
+            }
+            if ($product && $product->access_password) {
+                $message .= "🔑 *Password:* `{$product->access_password}`\n";
+            }
+            $message .= "\n";
+        }
+        
+        $message .= "📧 *Email:* {$order->user->email}\n\n";
+        
+        $message .= "📝 *Catatan:*\n";
+        $message .= "Maksimal login 2 device. Tidak lebih.\n\n";
+        
+        $message .= "⚠️ *Penting:*\n";
+        $message .= "• Simpan pesan ini sebagai backup, jangan dihapus.\n";
+        $message .= "• Jangan bagikan akun ini ke pihak lain.\n";
+        $message .= "• Kalau ada kendala, klaim garansi via halaman pesanan.\n\n";
+        
+        $message .= "Detail lengkap juga sudah dikirim ke email *{$order->user->email}*\n";
+        $message .= "_(cek folder Spam/Promotions kalau belum masuk)_\n\n";
+        
+        $message .= "🔗 *Cek detail pesanan:*\n" . route('my-orders.index') . "\n\n";
+        
+        $message .= "Terima kasih sudah belanja di *{$appName}*! 🙏";
+
+        // Simpan pesan ke log (backup kalau user copy manual)
+        Log::info("WhatsApp message for order #{$order->id}:", [
+            'phone' => $phone,
+            'message' => $message,
+        ]);
+
+        // Buka WhatsApp dengan pesan pre-filled
+        $waUrl = "https://wa.me/{$phone}?text=" . urlencode($message);
+        
+        Notification::make()
+            ->success()
+            ->title('WhatsApp Siap Dikirim')
+            ->body("Nomor: +{$phone}. Klik tombol di bawah untuk buka WhatsApp.")
+            ->actions([
+                \Filament\Notifications\Actions\Action::make('open_wa')
+                    ->label('📱 Buka WhatsApp')
+                    ->url($waUrl, shouldOpenInNewTab: true)
+                    ->color('success'),
+            ])
+            ->persistent()
+            ->send();
+        
+        // Juga open di tab baru langsung
+        $this->js("window.open('{$waUrl}', '_blank')");
     }
 
     protected function mutateFormDataBeforeSave(array $data): array
@@ -104,21 +201,9 @@ class EditOrder extends EditRecord
             try {
                 Mail::to($order->user->email)->send(new OrderAccessMail($order));
                 Log::info("Email order akses berhasil dikirim untuk order #{$order->id} ke {$order->user->email}");
-                
-                Notification::make()
-                    ->success()
-                    ->title('Email Terkirim')
-                    ->body("Akses produk sudah dikirim ke {$order->user->email}")
-                    ->send();
             } catch (\Exception $e) {
                 Log::error("Gagal mengirim email order #{$order->id}: " . $e->getMessage());
-                
-                Notification::make()
-                    ->warning()
-                    ->title('Order Tersimpan, Email Gagal')
-                    ->body("Order sukses diupdate tapi email gagal dikirim. Error: " . $e->getMessage() . ". Klik tombol '📧 Kirim Email Manual' untuk coba lagi.")
-                    ->duration(8000)
-                    ->send();
+                // Tidak tampilkan notifikasi lagi karena sudah ada tombol manual WA
             }
         }
     }
