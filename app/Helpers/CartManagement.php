@@ -29,7 +29,7 @@ class CartManagement {
                 $cart_items[] = [
                     'product_id' => $product_id,
                     'name' => $product->name,
-                    'image' => $product->images[0],
+                    'image' => !empty($product->images) ? $product->images[0] : null,
                     'quantity' => 1,
                     'unit_amount' => $product->price,
                     'total_amount' => $product->price
@@ -130,10 +130,10 @@ class CartManagement {
                 $cart_items[] = [
                     'product_id' => $product_id,
                     'name' => $product->name,
-                    'image' => $product->images[0],
+                    'image' => !empty($product->images) ? $product->images[0] : null,
                     'quantity' => $qty,
                     'unit_amount' => $product->price,
-                    'total_amount' => $product->price
+                    'total_amount' => $product->price * $qty
                 ];
             }
         }
