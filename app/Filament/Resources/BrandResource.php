@@ -56,7 +56,9 @@ class BrandResource extends Resource
 
                     FileUpload::make('image')
                     ->image()
-                    ->directory('categories'),
+                    ->directory('brands')
+                    ->imagePreviewHeight('100')
+                    ->placeholder('Upload logo brand atau biarkan kosong untuk menggunakan inisial'),
 
                     Toggle::make('is_active')
                     ->required()
@@ -71,7 +73,8 @@ class BrandResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
-                Tables\Columns\ImageColumn::make('image'),
+                Tables\Columns\ImageColumn::make('image')
+                    ->defaultImageUrl(fn (Brand $record): string => $record->image_url),
                 Tables\Columns\TextColumn::make('slug')
                     ->searchable(),
                 Tables\Columns\IconColumn::make('is_active')

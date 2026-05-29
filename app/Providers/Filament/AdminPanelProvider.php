@@ -28,6 +28,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('masuk-admin')
             ->login()
+            ->passwordReset()
             ->colors([
                 'primary' => Color::Teal,
             ])

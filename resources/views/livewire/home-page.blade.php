@@ -182,12 +182,8 @@
                     <div class="bg-white rounded-xl shadow-sm border border-teal-100 hover:shadow-md transition dark:bg-gray-800" wire:key="{{ $brand->id }}">
                         <a wire:navigate href="/products?selected_brands[0]={{ $brand->id }}">
                             <div class="aspect-[4/3] flex items-center justify-center p-6 bg-teal-50 rounded-t-xl">
-                                @if($brand->image)
-                                    <img src="{{ url('storage', $brand->image) }}" alt="{{ $brand->name }}"
-                                        class="object-contain w-full h-full">
-                                @else
-                                    <span class="text-4xl font-bold text-teal-600">{{ substr($brand->name, 0, 2) }}</span>
-                                @endif
+                                <img src="{{ $brand->image_url }}" alt="{{ $brand->name }}"
+                                    class="object-contain w-full h-full rounded-xl">
                             </div>
                         </a>
                         <div class="p-4 text-center">

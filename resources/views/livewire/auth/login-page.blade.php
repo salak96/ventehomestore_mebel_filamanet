@@ -51,6 +51,8 @@
                             <div>
                                 <div class="flex justify-between items-center">
                                     <label for="password" class="block text-sm mb-2 dark:text-white">Kata Sandi</label>
+                                    <a wire:navigate href="/forgot"
+                                        class="text-sm text-teal-600 hover:underline font-medium">Lupa Password?</a>
                                 </div>
 
                                 <!-- Alpine.js untuk toggle -->
