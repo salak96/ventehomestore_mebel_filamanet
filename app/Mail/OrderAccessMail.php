@@ -17,13 +17,13 @@ class OrderAccessMail extends Mailable
 
     public function __construct(Order $order)
     {
-        $this->order = $order;
+        $this->order = $order->loadMissing(['user', 'items.product']);
     }
 
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Akses Produk - ' . config('app.name'),
+            subject: '📦 Akun Sudah Dikirim — ' . config('app.name'),
         );
     }
 

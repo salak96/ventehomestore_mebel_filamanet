@@ -37,6 +37,17 @@ class OrderResource extends Resource
 
     protected static ?int $navigationSort = 5;
 
+    public static function parseRupiah($value): int
+    {
+        $str = str_replace(['Rp', 'Rp ', ' '], '', (string) $value);
+        // Indonesian format: "50.000" = 50 thousand, "1.000.000" = 1 million
+        if (preg_match('/^\d{1,3}(\.\d{3})+$/', $str)) {
+            return (int) str_replace('.', '', $str);
+        }
+        // Decimal format: "50000.00" or plain integer
+        return (int) round((float) $str);
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -154,11 +165,11 @@ class OrderResource extends Resource
                                             return digits.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
                                         }
                                     JS))
-                                    ->dehydrateStateUsing(fn ($state) => (int) str_replace(['.', 'Rp', ' '], '', (string) $state))
+                                    ->dehydrateStateUsing(fn ($state) => self::parseRupiah($state))
                                     ->formatStateUsing(fn ($state) => $state !== null ? number_format((float) $state, 0, ',', '.') : null)
                                     ->reactive()
                                     ->afterStateUpdated(function ($state, Set $set, Get $get) {
-                                        $price = (int) str_replace(['.', 'Rp', ' '], '', (string) $state);
+                                        $price = self::parseRupiah($state);
                                         $qty   = (int) ($get('quantity') ?: 1);
                                         $set('total_amount', $price * $qty);
                                     })
@@ -176,7 +187,7 @@ class OrderResource extends Resource
                                             return digits.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
                                         }
                                     JS))
-                                    ->dehydrateStateUsing(fn ($state) => (int) str_replace(['.', 'Rp', ' '], '', (string) $state))
+                                    ->dehydrateStateUsing(fn ($state) => self::parseRupiah($state))
                                     ->formatStateUsing(fn ($state) => $state !== null ? number_format((float) $state, 0, ',', '.') : null)
                                     ->columnSpan(3),
                             ])->columns(12),
@@ -187,9 +198,8 @@ class OrderResource extends Resource
                             ->content(function (Get $get, Set $set) {
                                 $sum = 0;
                                 foreach ((array) $get('items') as $idx => $row) {
-                                    // Bisa berupa angka atau string bermask
                                     $val = $row['total_amount'] ?? 0;
-                                    $sum += (int) (is_numeric($val) ? $val : str_replace(['.', 'Rp', ' '], '', (string) $val));
+                                    $sum += self::parseRupiah($val);
                                 }
                                 $set('grand_total', $sum);
                                 return 'Rp ' . number_format($sum, 0, ',', '.');

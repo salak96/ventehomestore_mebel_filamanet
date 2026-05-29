@@ -38,6 +38,15 @@ class ProductResource extends Resource
 
     protected static ?int $navigationSort = 4;
 
+    public static function parseRupiah($value): int
+    {
+        $str = str_replace(['Rp', 'Rp ', ' '], '', (string) $value);
+        if (preg_match('/^\d{1,3}(\.\d{3})+$/', $str)) {
+            return (int) str_replace('.', '', $str);
+        }
+        return (int) round((float) $str);
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -89,8 +98,8 @@ class ProductResource extends Resource
                                     return digits.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
                                 }
                             JS))
-                            // Saat menyimpan ke DB, hapus semua titik/Rp/spasi
-                            ->dehydrateStateUsing(fn ($state) => (int) str_replace(['.', 'Rp', ' '], '', (string) $state))
+                            // Saat menyimpan ke DB, parse format Rupiah ke angka bersih
+                            ->dehydrateStateUsing(fn ($state) => self::parseRupiah($state))
                             // Saat edit (load dari DB), tampilkan dalam format ribuan titik (tanpa desimal)
                             ->formatStateUsing(fn ($state) => $state !== null ? number_format((float) $state, 0, ',', '.') : null),
                     ]),
