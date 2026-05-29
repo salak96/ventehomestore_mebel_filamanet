@@ -12,7 +12,9 @@ class CreateOrder extends CreateRecord
 
     protected function mutateFormDataBeforeSave(array $data): array
     {
-        $data['grand_total'] = collect($data['items'] ?? [])->sum(fn($item) => (int) ($item['total_amount'] ?? 0));
+        $data['grand_total'] = collect($data['items'] ?? [])->sum(function($item) {
+            return OrderResource::parseRupiah($item['total_amount'] ?? 0);
+        });
 
         return $data;
     }

@@ -7,6 +7,7 @@ use App\Filament\Resources\OrderResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 class EditOrder extends EditRecord
 {
@@ -22,7 +23,9 @@ class EditOrder extends EditRecord
 
     protected function mutateFormDataBeforeSave(array $data): array
     {
-        $data['grand_total'] = collect($data['items'] ?? [])->sum(fn($item) => (int) ($item['total_amount'] ?? 0));
+        $data['grand_total'] = collect($data['items'] ?? [])->sum(function($item) {
+            return OrderResource::parseRupiah($item['total_amount'] ?? 0);
+        });
 
         return $data;
     }
@@ -30,8 +33,15 @@ class EditOrder extends EditRecord
     protected function afterSave(): void
     {
         $order = $this->record;
+        
         if ($order->payment_status === 'success' && $order->user && $order->user->email) {
-            Mail::to($order->user->email)->send(new OrderAccessMail($order));
+            try {
+                Mail::to($order->user->email)->send(new OrderAccessMail($order));
+                Log::info("Email order akses berhasil dikirim untuk order #{$order->id} ke {$order->user->email}");
+            } catch (\Exception $e) {
+                Log::error("Gagal mengirim email order #{$order->id}: " . $e->getMessage());
+                session()->flash('warning', 'Order berhasil diupdate, tetapi email gagal dikirim: ' . $e->getMessage());
+            }
         }
     }
 
