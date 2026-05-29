@@ -384,11 +384,11 @@
                     <div class="flex flex-wrap items-center justify-between pb-4 mb-6 space-x-2 border-b dark:border-gray-700">
                         <div class="flex items-center px-6 mb-2 md:mb-0">
                             <div class="flex mr-2 rounded-full">
-                                <img src="https://i.postimg.cc/rF6G0Dh9/pexels-emmy-e-2381069.jpg" alt=""
+                                <img src="https://images.unsplash.com/photo-1621982400152-883d350ac611?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt=""
                                     class="object-cover w-12 h-12 rounded-full">
                             </div>
                             <div>
-                                <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-300">Andi Pratama</h2>
+                                <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-300">Sugiyanto</h2>
                                 <p class="text-xs text-gray-500 dark:text-gray-400">Teknisi STB</p>
                             </div>
                         </div>
@@ -414,11 +414,11 @@
                     <div class="flex flex-wrap items-center justify-between pb-4 mb-6 space-x-2 border-b dark:border-gray-700">
                         <div class="flex items-center px-6 mb-2 md:mb-0">
                             <div class="flex mr-2 rounded-full">
-                                <img src="https://i.postimg.cc/q7pv50zT/pexels-edmond-dant-s-4342352.jpg" alt=""
+                                <img src="https://images.unsplash.com/photo-1629326267282-015d1593d84e?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Tara Art"
                                     class="object-cover w-12 h-12 rounded-full">
                             </div>
                             <div>
-                                <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-300">Rina Fitriani</h2>
+                                <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-300">Tara Art</h2>
                                 <p class="text-xs text-gray-500 dark:text-gray-400">Content Creator</p>
                             </div>
                         </div>
@@ -444,11 +444,11 @@
                     <div class="flex flex-wrap items-center justify-between pb-4 mb-6 space-x-2 border-b dark:border-gray-700">
                         <div class="flex items-center px-6 mb-2 md:mb-0">
                             <div class="flex mr-2 rounded-full">
-                                <img src="https://i.postimg.cc/JzmrHQmk/pexels-pixabay-220453.jpg" alt=""
+                                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Budi Santoso"
                                     class="object-cover w-12 h-12 rounded-full">
                             </div>
                             <div>
-                                <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-300">Budi Santoso</h2>
+                                <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-300">Riyanto Budi Santoso</h2>
                                 <p class="text-xs text-gray-500 dark:text-gray-400">Pengguna Android</p>
                             </div>
                         </div>
@@ -473,7 +473,7 @@
                     <div class="flex flex-wrap items-center justify-between pb-4 mb-6 space-x-2 border-b dark:border-gray-700">
                         <div class="flex items-center px-6 mb-2 md:mb-0">
                             <div class="flex mr-2 rounded-full">
-                                <img src="https://i.postimg.cc/4NMZPYdh/pexels-dinielle-de-veyra-4195342.jpg" alt=""
+                                <img src="https://images.unsplash.com/photo-1644860704769-c61c84be7836?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Siti Nurjanah"
                                     class="object-cover w-12 h-12 rounded-full">
                             </div>
                             <div>
