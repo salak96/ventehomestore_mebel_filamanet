@@ -13,13 +13,19 @@ class TrackPageView
     {
         $response = $next($request);
 
-        if ($request->isMethod('GET') && ! $request->ajax()) {
-            VisitorTracking::create([
-                'ip_address' => $request->ip(),
-                'user_agent' => $request->userAgent(),
-                'page_url'   => $request->fullUrl(),
-                'action'     => 'view',
-            ]);
+        if ($request->isMethod('GET') && ! $request->ajax() && ! $request->is('livewire/*')) {
+            $lastVisit = session('last_page_view_time', 0);
+            $now = time();
+
+            if (($now - $lastVisit) >= 10) {
+                VisitorTracking::create([
+                    'ip_address' => $request->ip(),
+                    'user_agent' => $request->userAgent(),
+                    'page_url'   => $request->fullUrl(),
+                    'action'     => 'view',
+                ]);
+                session(['last_page_view_time' => $now]);
+            }
         }
 
         return $response;

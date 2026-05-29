@@ -114,23 +114,6 @@ class ProductsPage extends Component
         } elseif ($this->sort === 'price') {
             $productQuery->orderBy('price');
         }
-        // filter pencarian (nama, slug, deskripsi, opsional sku)
-        if (filled($this->search)) {
-            $term = trim($this->search);
-            $like = '%' . str_replace(['%', '_'], ['\%', '\_'], $term) . '%';
-
-            $productQuery->where(function ($q) use ($like) {
-                $q->where('name', 'like', $like)
-                    ->orWhere('slug', 'like', $like)
-                    ->orWhere('description', 'like', $like);
-
-                // hanya tambahkan jika kolom sku memang ada
-                if (\Illuminate\Support\Facades\Schema::hasColumn('products', 'sku')) {
-                    $q->orWhere('sku', 'like', $like);
-                }
-            });
-        }
-
 
         return view('livewire.products-page', [
             'products'   => $productQuery->paginate(9),

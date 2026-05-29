@@ -23,7 +23,7 @@ use App\Livewire\Auth\ResetPasswordPage;
 use App\Livewire\Auth\MyAccountPage;
 
 // --- Public (with rate limit) ---
-Route::middleware('throttle:120,1')->group(function () {
+Route::middleware('throttle:300,1')->group(function () {
     Route::get('/', HomePage::class)->name('home');
     Route::get('/categories', CategoriesPage::class)->name('categories');
     Route::get('/products', ProductsPage::class)->name('products.index');

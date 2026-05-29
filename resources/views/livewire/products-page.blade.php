@@ -50,7 +50,7 @@
             <div class="flex items-center gap-3">
                 <!-- Sort -->
                 <select
-                    wire:model.live="sort"
+                    wire:model.live.change="sort"
                     class="block w-48 text-sm sm:text-base bg-white border border-teal-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-400 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300">
                     <option value="latest">Urutkan: Terbaru</option>
                     <option value="price">Urutkan: Harga</option>
@@ -89,7 +89,7 @@
                                     <li wire:key="cat-{{ $category->id }}">
                                         <label for="cat-{{ $category->slug }}" class="group flex items-center gap-3 cursor-pointer">
                                             <input type="checkbox" id="cat-{{ $category->slug }}"
-                                                   value="{{ $category->id }}" wire:model.live="selected_categories"
+                                                   value="{{ $category->id }}" wire:model.live.change="selected_categories"
                                                    class="peer size-4 accent-teal-600 rounded border-gray-300 focus:ring-teal-400">
                                             <span class="text-base text-gray-700 group-hover:text-teal-700 dark:text-gray-300 dark:group-hover:text-gray-100">
                                                 {{ $category->name }}
@@ -110,7 +110,7 @@
                                     <li wire:key="brand-{{ $brand->id }}">
                                         <label for="brand-{{ $brand->slug }}" class="group inline-flex items-center gap-3 cursor-pointer">
                                             <input type="checkbox" id="brand-{{ $brand->slug }}"
-                                                   value="{{ $brand->id }}" wire:model.live="selected_brands"
+                                                   value="{{ $brand->id }}" wire:model.live.change="selected_brands"
                                                    class="peer size-4 accent-teal-600 rounded border-gray-300 focus:ring-teal-400">
                                             <span class="text-base text-gray-700 group-hover:text-teal-700 dark:text-gray-300 dark:group-hover:text-gray-100">
                                                 {{ $brand->name }}
@@ -129,14 +129,14 @@
                             <ul class="mt-5 space-y-3">
                                 <li>
                                     <label class="flex items-center gap-3 cursor-pointer">
-                                        <input type="checkbox" wire:model.live="featured"
+                                        <input type="checkbox" wire:model.live.change="featured"
                                                class="size-4 accent-teal-600 rounded border-gray-300 focus:ring-teal-400">
                                         <span class="text-base text-gray-700 dark:text-gray-300">Produk Unggulan</span>
                                     </label>
                                 </li>
                                 <li>
                                     <label class="flex items-center gap-3 cursor-pointer">
-                                        <input type="checkbox" wire:model.live="onSale"
+                                        <input type="checkbox" wire:model.live.change="onSale"
                                                class="size-4 accent-teal-600 rounded border-gray-300 focus:ring-teal-400">
                                         <span class="text-base text-gray-700 dark:text-gray-300">Sedang Diskon</span>
                                     </label>
@@ -152,7 +152,7 @@
                             <div class="mt-5">
                                 <input
                                     type="range"
-                                    wire:model.live="price_range"
+                                    wire:model.live.debounce.500ms="price_range"
                                     max="5000000"
                                     step="100000"
                                     class="w-full h-2 bg-teal-100 rounded-lg appearance-none cursor-pointer">
