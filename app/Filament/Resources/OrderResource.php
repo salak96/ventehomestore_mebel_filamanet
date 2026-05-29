@@ -60,8 +60,8 @@ class OrderResource extends Resource
                         Select::make('payment_status')
                             ->options([
                                 'pending' => 'Pending',
-                                'paid'    => 'Paid',
-                                'failled' => 'Failled', // kalau mau, ganti ke 'failed'
+                                'success' => 'Success',
+                                'failed'  => 'Failed',
                             ])
                             ->default('pending')
                             ->required(),
@@ -94,7 +94,6 @@ class OrderResource extends Resource
                         Select::make('currency')
                             ->options([
                                 'usd' => 'USD',
-                                'eur' => 'EUR',
                                 'idr' => 'IDR',
                             ])
                             ->default('idr') // selaras lowercase
@@ -102,10 +101,9 @@ class OrderResource extends Resource
 
                         Select::make('shipping_method')
                             ->options([
-                                'fedex' => 'FedEx',
-                                'ups'   => 'UPS',
-                                'dhl'   => 'DHL',
-                                'usps'  => 'USPS',
+                                'jne'          => 'JNE',
+                                'jnt'          => 'J&T',
+                                'pos_indonesia' => 'Kantor Pos Indonesia',
                             ]),
 
                         Textarea::make('notes')
@@ -207,6 +205,10 @@ class OrderResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('index')
+                    ->label('No')
+                    ->rowIndex(),
+
                 TextColumn::make('id')
                     ->label('Order ID')
                     ->sortable()
@@ -230,6 +232,13 @@ class OrderResource extends Resource
                     ->sortable(),
 
                 TextColumn::make('payment_status')
+                    ->badge()
+                    ->color(fn(string $state): string => match($state) {
+                        'pending' => 'warning',
+                        'success' => 'success',
+                        'failed'  => 'danger',
+                        default  => 'gray',
+                    })
                     ->searchable()
                     ->sortable(),
 

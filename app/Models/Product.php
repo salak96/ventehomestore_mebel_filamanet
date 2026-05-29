@@ -28,6 +28,9 @@ class Product extends Model
         'is_featured',
         'in_stock',
         'on_sale',
+        'access_link',
+        'access_username',
+        'access_password',
     ];
 
     protected $casts = [

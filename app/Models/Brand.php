@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Product;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -22,9 +23,11 @@ class Brand extends Model
 
     public function getImageUrlAttribute(): string
     {
-        return $this->image
-            ? url('storage', $this->image)
-            : 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&background=0D9488&color=fff&size=128';
+        if ($this->image && Storage::disk('public')->exists($this->image)) {
+            return url('storage/' . $this->image);
+        }
+
+        return 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&background=0D9488&color=fff&size=128';
     }
 
     public function products()

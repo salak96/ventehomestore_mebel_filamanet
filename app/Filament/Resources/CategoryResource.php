@@ -57,6 +57,7 @@ class CategoryResource extends Resource
 
                     FileUpload::make('image')
                     ->image()
+                    ->disk('public')
                     ->directory('categories'),
 
                     Toggle::make('is_active')
@@ -70,10 +71,15 @@ class CategoryResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('index')
+                    ->label('No')
+                    ->rowIndex(),
+
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
 
-                Tables\Columns\ImageColumn::make('image'),
+                Tables\Columns\ImageColumn::make('image')
+                    ->getStateUsing(fn (Category $record): string => $record->image_url),
 
                 Tables\Columns\TextColumn::make('slug')
                     ->searchable(),

@@ -36,7 +36,7 @@ class OrdersRelationManager extends RelationManager
                 ->searchable(),
 
                 TextColumn::make('grand_total')
-                ->money('IDR'),
+                ->formatStateUsing(fn ($state) => 'Rp ' . number_format($state, 0, ',', '.')),
 
                 TextColumn::make('status')
                 ->badge()
@@ -61,8 +61,14 @@ class OrdersRelationManager extends RelationManager
                 ->searchable(),
 
                 TextColumn::make('payment_status')
-                ->sortable()
                 ->badge()
+                ->color(fn(string $state): string => match($state) {
+                    'pending' => 'warning',
+                    'success' => 'success',
+                    'failed'  => 'danger',
+                    default  => 'gray',
+                })
+                ->sortable()
                 ->searchable(),
 
                 TextColumn::make('created_at')

@@ -110,10 +110,21 @@ class ProductResource extends Resource
                     ]),
 
                     Section::make('Status')->schema([
-                        Toggle::make('in_stock')->required()->default(true),
-                        Toggle::make('is_active')->required()->default(true),
-                        Toggle::make('is_featured')->required(),
-                        Toggle::make('on_sale')->required(),
+                        Toggle::make('in_stock')->label('Stok Tersedia')->required()->default(true),
+                        Toggle::make('is_active')->label('Aktif')->required()->default(true),
+                        Toggle::make('is_featured')->label('Unggulan')->required(),
+                        Toggle::make('on_sale')->label('Diskon')->required(),
+                    ]),
+
+                    Section::make('Digital Access')->schema([
+                        Forms\Components\TextInput::make('access_link')
+                            ->label('Link Akses / Download')
+                            ->url()
+                            ->placeholder('https://...'),
+                        Forms\Components\TextInput::make('access_username')
+                            ->label('Username'),
+                        Forms\Components\TextInput::make('access_password')
+                            ->label('Password'),
                     ]),
                 ])->columnSpan(1),
             ])->columns(3);
@@ -123,6 +134,10 @@ class ProductResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('index')
+                    ->label('No')
+                    ->rowIndex(),
+
                 TextColumn::make('name')->searchable(),
                 TextColumn::make('category.name')->sortable(),
                 TextColumn::make('brand.name')->sortable(),
@@ -134,10 +149,18 @@ class ProductResource extends Resource
                     ->sortable()
                     ->formatStateUsing(fn ($state) => 'Rp ' . number_format((float) $state, 0, ',', '.')),
 
-                IconColumn::make('is_featured')->boolean(),
-                IconColumn::make('on_sale')->boolean(),
-                IconColumn::make('in_stock')->boolean(),
-                IconColumn::make('is_active')->boolean(),
+                IconColumn::make('is_featured')->label('Unggulan')->boolean(),
+                IconColumn::make('on_sale')->label('Diskon')->boolean(),
+                IconColumn::make('in_stock')->label('Stok Tersedia')->boolean(),
+                IconColumn::make('is_active')->label('Aktif')->boolean(),
+
+                TextColumn::make('access_link')
+                    ->label('Link')
+                    ->limit(20)
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('access_username')
+                    ->label('User')
+                    ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('created_at')
                     ->datetime()

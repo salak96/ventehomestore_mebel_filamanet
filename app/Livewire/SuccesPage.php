@@ -8,12 +8,21 @@ use Livewire\Component;
 use Livewire\Attributes\Url;
 use Stripe\Checkout\Session;
 use Livewire\Attributes\Title;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderAccessMail;
 
 #[Title('Success - AndroidStore')]
 class SuccesPage extends Component
 {
     #[Url]
     public $session_id;
+
+    private function sendAccessEmail(Order $order): void
+    {
+        if ($order->user && $order->user->email) {
+            Mail::to($order->user->email)->send(new OrderAccessMail($order));
+        }
+    }
 
     public function render()
     {
@@ -28,8 +37,9 @@ class SuccesPage extends Component
                 $latest_order->save();
                 return redirect->route('cancel');
             } else if ($session_info->payment_status == 'paid') {
-                $latest_order->payment_status = 'paid';
+                $latest_order->payment_status = 'success';
                 $latest_order->save();
+                $this->sendAccessEmail($latest_order);
             }
         }
 

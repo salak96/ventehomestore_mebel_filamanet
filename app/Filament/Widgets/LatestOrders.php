@@ -39,16 +39,22 @@ class LatestOrders extends BaseWidget
                 ->searchable(),
 
                 TextColumn::make('grand_total')
-                ->numeric()
                 ->sortable()
-                ->money('IDR')
-                ->searchable(),
+                ->searchable()
+                ->formatStateUsing(fn ($state) => 'Rp ' . number_format($state, 0, ',', '.')),
 
                 TextColumn::make('payment_method')
                 ->searchable()
                 ->sortable(),
 
                 TextColumn::make('payment_status')
+                ->badge()
+                ->color(fn(string $state): string => match($state) {
+                    'pending' => 'warning',
+                    'success' => 'success',
+                    'failed'  => 'danger',
+                    default  => 'gray',
+                })
                 ->searchable()
                 ->sortable(),
 
