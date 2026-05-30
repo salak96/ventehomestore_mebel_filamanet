@@ -1,18 +1,16 @@
 @php
-  // Helper Rupiah tanpa desimal
   $rupiah = static function ($v): string {
       if ($v === null || $v === '') return 'Rp 0';
       return 'Rp ' . number_format((float) $v, 0, ',', '.');
   };
 
-  // Siapkan array URL gambar
   $rawImages = is_array($products->images ?? null) ? $products->images : (array) ($products->images ?? []);
   if (empty($rawImages)) {
       $rawImages = ['images/default.png'];
   }
   $imageUrls = [];
   foreach ($rawImages as $img) {
-      $imageUrls[] = $img === 'images/default.png' ? asset($img) : url('storage', $img);
+      $imageUrls[] = $img === 'images/default.png' ? asset($img) : storage_url($img);
   }
 @endphp
 
@@ -21,11 +19,9 @@
     <div class="max-w-6xl px-4 py-4 mx-auto lg:py-8 md:px-6">
       <div class="flex flex-wrap -mx-4">
 
-        {{-- Bagian Gambar Produk --}}
         <div class="w-full mb-8 md:w-1/2 md:mb-0"
              x-data="{ images: @js($imageUrls), i: 0 }">
-          <div class="sticky top-24 z-10"> {{-- tidak menindih navbar --}}
-            {{-- Gambar utama --}}
+          <div class="sticky top-24 z-10">
             <div class="relative mb-4 lg:mb-6">
               <div class="aspect-[4/3] w-full overflow-hidden rounded-2xl bg-gray-50">
                 <img :src="images[i]"
@@ -36,7 +32,6 @@
               </div>
             </div>
 
-            {{-- Thumbnail: desktop (grid) --}}
             <div class="hidden md:grid grid-cols-4 gap-3">
               @foreach ($imageUrls as $idx => $src)
                         <button type="button"
@@ -53,7 +48,6 @@
               @endforeach
             </div>
 
-            {{-- Thumbnail: mobile (scroll-snap) --}}
             <div class="md:hidden mt-3 overflow-x-auto -mx-1 px-1">
               <div class="flex gap-3 snap-x snap-mandatory">
                 @foreach ($imageUrls as $idx => $src)
@@ -72,7 +66,6 @@
               </div>
             </div>
 
-            {{-- Info tambahan --}}
             <div class="px-6 pb-6 mt-6 border-t border-gray-200 dark:border-gray-700">
               <div class="flex items-center gap-2 mt-4">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-700 dark:text-gray-400" fill="currentColor" viewBox="0 0 16 16">
@@ -84,23 +77,63 @@
           </div>
         </div>
 
-        {{-- Bagian Detail Produk --}}
         <div class="w-full px-4 md:w-1/2">
           <div class="lg:pl-20">
-            {{-- Nama & Harga --}}
             <div class="mb-8">
               <h1 class="max-w-xl mb-3 text-2xl md:text-4xl font-bold text-gray-900 dark:text-gray-100">
                 {{ $products->name }}
               </h1>
               <p class="inline-block mb-4 text-3xl md:text-4xl font-bold text-emerald-700">
-                {{ $rupiah($products->price) }}
+                {{ $rupiah($currentPrice) }}
               </p>
-              <div class="prose prose-sm md:prose-base dark:prose-invert max-w-none text-gray-700 dark:text-gray-300">
-                {!! Str::markdown($products->description) !!}
+            </div>
+
+            @if($products->variants && $products->variants->count() > 0)
+            <div class="mb-6">
+              <label class="block pb-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
+                Pilih Varian
+              </label>
+              <div class="flex flex-wrap gap-2">
+                @foreach($products->variants as $variant)
+                  <button
+                    wire:click="selectVariant({{ $variant->id }})"
+                    @class([
+                      'px-4 py-2 rounded-xl border text-sm font-medium transition-all',
+                      'border-teal-500 bg-teal-50 text-teal-700 ring-2 ring-teal-300' => $selected_variant_id == $variant->id,
+                      'border-gray-300 bg-white text-gray-700 hover:border-teal-300 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200' => $selected_variant_id != $variant->id,
+                      'opacity-50 cursor-not-allowed line-through' => $variant->stock === 0,
+                    ])
+                    @if($variant->stock === 0) disabled @endif
+                  >
+                    {{ $variant->name }}
+                    @if($variant->stock === 0)
+                      <span class="ml-1 text-xs text-red-500">(Habis)</span>
+                    @endif
+                  </button>
+                @endforeach
+              </div>
+            </div>
+            @endif
+
+            <div class="mb-6">
+              <div class="flex items-center gap-3 mb-2">
+                <span class="text-sm font-semibold text-gray-700 dark:text-gray-300">Stok:</span>
+                @if($currentStock > 0)
+                  <span @class([
+                    'inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full',
+                    'bg-green-100 text-green-700' => $currentStock > 5,
+                    'bg-amber-100 text-amber-700' => $currentStock <= 5 && $currentStock > 0,
+                  ])>
+                    {{ $currentStock }} tersedia
+                  </span>
+                @else
+                  <span class="inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-red-100 text-red-700">
+                    Stok Habis
+                  </span>
+                @endif
               </div>
             </div>
 
-            {{-- Jumlah Produk --}}
             <div class="mb-8">
               <label class="block pb-1 text-sm font-semibold text-gray-700 dark:text-gray-300">
                 Jumlah
@@ -108,7 +141,7 @@
               <div class="inline-flex items-stretch mt-2 rounded-xl border border-gray-300 dark:border-gray-700 overflow-hidden">
                 <button wire:click="decreaseQty"
                         class="px-3 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
-                        aria-label="Kurangi jumlah">−</button>
+                        aria-label="Kurangi jumlah">&#8722;</button>
                 <input type="number" wire:model="quantity" readonly
                        class="w-14 text-center font-semibold bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-gray-100 focus:outline-none"
                        aria-label="Jumlah" />
@@ -116,19 +149,40 @@
                         class="px-3 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
                         aria-label="Tambah jumlah">+</button>
               </div>
+              @if($currentStock > 0 && $currentStock <= 10)
+                <p class="mt-2 text-xs text-amber-600">Sisa {{ $currentStock }} lagi</p>
+              @endif
             </div>
 
-            {{-- Tombol Tambah ke Keranjang --}}
             <div class="flex flex-wrap items-center gap-3">
               <button wire:click="addToCart({{ $products->id }})"
-                      class="w-full sm:w-auto px-6 py-3 rounded-xl bg-teal-600 text-white font-semibold hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-400">
-                <span wire:loading.remove wire:target="addToCart({{ $products->id }})">Tambah ke Keranjang</span>
-                <span wire:loading wire:target="addToCart({{ $products->id }})">Menambahkan…</span>
+                      @if($currentStock === 0) disabled @endif
+                      @class([
+                        'w-full sm:w-auto px-6 py-3 rounded-xl font-semibold focus:outline-none focus:ring-2 focus:ring-teal-400',
+                        'bg-teal-600 text-white hover:bg-teal-700' => $currentStock > 0,
+                        'bg-gray-300 text-gray-500 cursor-not-allowed' => $currentStock === 0,
+                      ])>
+                @if($currentStock === 0)
+                  <span>Stok Habis</span>
+                @else
+                  <span wire:loading.remove wire:target="addToCart({{ $products->id }})">Tambah ke Keranjang</span>
+                  <span wire:loading wire:target="addToCart({{ $products->id }})">Menambahkan...</span>
+                @endif
               </button>
             </div>
           </div>
         </div>
 
+      </div>
+
+      {{-- Deskripsi Produk --}}
+      <div class="mt-12 border-t border-gray-200 dark:border-gray-700 pt-8">
+        <h2 class="text-2xl md:text-3xl font-bold text-center text-gray-900 dark:text-gray-100 mb-6">
+          Deskripsi Produk
+        </h2>
+        <div class="prose prose-sm md:prose-base dark:prose-invert max-w-3xl mx-auto text-center text-gray-700 dark:text-gray-300">
+          {!! Str::markdown($products->description) !!}
+        </div>
       </div>
     </div>
   </section>

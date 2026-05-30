@@ -24,7 +24,7 @@ class Category extends Model
     public function getImageUrlAttribute(): string
     {
         if ($this->image && Storage::disk('public')->exists($this->image)) {
-            return url('storage/' . $this->image);
+            return storage_url($this->image);
         }
 
         return 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&background=0D9488&color=fff&size=128';

@@ -77,9 +77,20 @@ class ProductResource extends Resource
                     Section::make('Images')->schema([
                         FileUpload::make('images')
                             ->multiple()
+                            ->disk('public')
                             ->directory('products')
-                            ->maxFiles(5)
-                            ->reorderable(),
+                            ->maxFiles(4)
+                            ->maxSize(5120)
+                            ->image()
+                            ->imageEditor()
+                            ->reorderable()
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                            ->helperText('Maksimal 4 gambar, masing-masing max 5 MB (JPG, PNG, WebP)')
+                            ->saveUploadedFileUsing(function ($file) {
+                                $filename = \Illuminate\Support\Str::uuid() . '.' . $file->getClientOriginalExtension();
+                                $path = $file->storeAs('products', $filename, 'public');
+                                return str_replace('\\', '/', $path);
+                            }),
                     ]),
                 ])->columnSpan(2),
 
@@ -119,7 +130,13 @@ class ProductResource extends Resource
                     ]),
 
                     Section::make('Status')->schema([
-                        Toggle::make('in_stock')->label('Stok Tersedia')->required()->default(true),
+                        TextInput::make('stock')
+                            ->label('Stok')
+                            ->required()
+                            ->numeric()
+                            ->minValue(0)
+                            ->default(0)
+                            ->helperText('Jumlah stok produk utama. Varian punya stok sendiri.'),
                         Toggle::make('is_active')->label('Aktif')->required()->default(true),
                         Toggle::make('is_featured')->label('Unggulan')->required(),
                         Toggle::make('on_sale')->label('Diskon')->required(),
@@ -160,7 +177,15 @@ class ProductResource extends Resource
 
                 IconColumn::make('is_featured')->label('Unggulan')->boolean(),
                 IconColumn::make('on_sale')->label('Diskon')->boolean(),
-                IconColumn::make('in_stock')->label('Stok Tersedia')->boolean(),
+                \Filament\Tables\Columns\TextColumn::make('stock')
+                    ->label('Stok')
+                    ->badge()
+                    ->sortable()
+                    ->color(fn (int $state): string => match (true) {
+                        $state === 0      => 'danger',
+                        $state <= 5       => 'warning',
+                        default           => 'success',
+                    }),
                 IconColumn::make('is_active')->label('Aktif')->boolean(),
 
                 TextColumn::make('access_link')
@@ -196,7 +221,9 @@ class ProductResource extends Resource
 
     public static function getRelations(): array
     {
-        return [];
+        return [
+            RelationManagers\ProductVariantRelationManager::class,
+        ];
     }
 
     public static function getPages(): array

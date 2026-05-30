@@ -227,7 +227,7 @@
                             <div class="flex justify-between items-center">
                                 <div class="flex items-center">
                                     <img class="h-[2.375rem] w-[2.375rem] rounded-full"
-                                        src="{{ url('storage', $category->image) }}" alt="{{ $category->name }}">
+                                        src="{{ storage_url($category->image) }}" alt="{{ $category->name }}">
                                     <div class="ms-3">
                                         <h3
                                             class="group-hover:text-teal-600 font-semibold text-gray-800 dark:group-hover:text-teal-600 dark:text-gray-200">

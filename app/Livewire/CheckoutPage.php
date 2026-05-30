@@ -91,11 +91,13 @@ class CheckoutPage extends Component
 
             foreach ($this->cart_items as $item) {
                 $order->items()->create([
-                    'product_id'   => $item['product_id'],
-                    'name'         => $item['name'],
-                    'quantity'     => $item['quantity'],
-                    'unit_amount'  => $item['unit_amount'],
-                    'total_amount' => $item['total_amount'],
+                    'product_id'         => $item['product_id'],
+                    'product_variant_id' => $item['product_variant_id'] ?? null,
+                    'name'               => $item['name'],
+                    'variant_name'       => $item['variant_name'] ?? null,
+                    'quantity'           => $item['quantity'],
+                    'unit_amount'        => $item['unit_amount'],
+                    'total_amount'       => $item['total_amount'],
                 ]);
             }
 
@@ -121,11 +123,13 @@ class CheckoutPage extends Component
 
         foreach ($this->cart_items as $item) {
             $order->items()->create([
-                'product_id'   => $item['product_id'],
-                'name'         => $item['name'],
-                'quantity'     => $item['quantity'],
-                'unit_amount'  => $item['unit_amount'],
-                'total_amount' => $item['total_amount'],
+                'product_id'         => $item['product_id'],
+                'product_variant_id' => $item['product_variant_id'] ?? null,
+                'name'               => $item['name'],
+                'variant_name'       => $item['variant_name'] ?? null,
+                'quantity'           => $item['quantity'],
+                'unit_amount'        => $item['unit_amount'],
+                'total_amount'       => $item['total_amount'],
             ]);
         }
 

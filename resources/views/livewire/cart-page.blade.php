@@ -47,13 +47,13 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-teal-100">
-                            @forelse ($cart_items as $item)
-                                <tr wire:key="row-{{ $item['product_id'] }}" class="align-top">
+                            @forelse ($cart_items as $cart_key => $item)
+                                <tr wire:key="row-{{ $cart_key }}" class="align-top">
                                     <td class="px-6 py-4">
                                         <div class="flex items-center gap-4">
                                             @php
                                               $img = $item['image'] ?? null;
-                                              $imgUrl = $img ? url('storage', $img) : asset('images/default.png');
+                                              $imgUrl = $img ? storage_url($img) : asset('images/default.png');
                                             @endphp
                                             <img class="h-16 w-16 rounded-lg object-cover border border-teal-100"
                                                  src="{{ $imgUrl }}" alt="{{ $item['name'] }}">
@@ -62,9 +62,9 @@
                                                    class="font-semibold text-gray-800 hover:text-teal-700">
                                                     {{ $item['name'] }}
                                                 </a>
-                                                @isset($item['variant'])
-                                                    <div class="mt-1 text-xs text-gray-500">Varian: {{ $item['variant'] }}</div>
-                                                @endisset
+                                                @if(!empty($item['variant_name']))
+                                                    <div class="mt-1 text-xs text-gray-500">Varian: {{ $item['variant_name'] }}</div>
+                                                @endif
                                             </div>
                                         </div>
                                     </td>
@@ -77,12 +77,12 @@
 
                                     <td class="px-6 py-4">
                                         <div class="inline-flex items-center rounded-xl border border-teal-200 overflow-hidden">
-                                            <button wire:click="decreaseItem({{ $item['product_id'] }})"
+                                            <button wire:click="decreaseItem('{{ $cart_key }}')"
                                                     class="px-3 py-2 hover:bg-teal-50" aria-label="Kurangi jumlah">
                                                 −
                                             </button>
                                             <span class="px-4 py-2 min-w-8 text-center font-medium">{{ $item['quantity'] }}</span>
-                                            <button wire:click="increaseItem({{ $item['product_id'] }})"
+                                            <button wire:click="increaseItem('{{ $cart_key }}')"
                                                     class="px-3 py-2 hover:bg-teal-50" aria-label="Tambah jumlah">
                                                 +
                                             </button>
@@ -96,7 +96,7 @@
                                     </td>
 
                                     <td class="px-6 py-4">
-                                        <button wire:click="removeItem({{ $item['product_id'] }})"
+                                        <button wire:click="removeItem('{{ $cart_key }}')"
                                                 class="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-red-200 text-red-700 bg-red-50 hover:bg-red-100">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
                                                  viewBox="0 0 24 24" stroke="currentColor">
@@ -128,30 +128,33 @@
 
                 <!-- Kartu (mobile) -->
                 <div class="md:hidden divide-y divide-teal-100">
-                    @forelse ($cart_items as $item)
-                        <div class="p-4" wire:key="card-{{ $item['product_id'] }}">
+                    @forelse ($cart_items as $cart_key => $item)
+                        <div class="p-4" wire:key="card-{{ $cart_key }}">
                             <div class="flex gap-4">
                                 @php
                                   $img = $item['image'] ?? null;
-                                  $imgUrl = $img ? url('storage', $img) : asset('images/default.png');
+                                  $imgUrl = $img ? storage_url($img) : asset('images/default.png');
                                 @endphp
                                 <img class="h-20 w-20 rounded-lg object-cover border border-teal-100"
                                      src="{{ $imgUrl }}" alt="{{ $item['name'] }}">
                                 <div class="min-w-0 flex-1">
                                     <div class="flex items-start justify-between gap-3">
                                         <h3 class="font-semibold text-gray-800 line-clamp-2">{{ $item['name'] }}</h3>
-                                        <button wire:click="removeItem({{ $item['product_id'] }})"
+                                        <button wire:click="removeItem('{{ $cart_key }}')"
                                                 class="text-gray-500 hover:underline text-sm">Hapus</button>
                                     </div>
+                                    @if(!empty($item['variant_name']))
+                                        <div class="mt-1 text-xs text-gray-500">Varian: {{ $item['variant_name'] }}</div>
+                                    @endif
                                     <div class="mt-1 text-sm text-gray-600">
                                         Harga:
                                         <span class="font-medium text-gray-800">{{ $rupiah($item['unit_amount']) }}</span>
                                     </div>
                                     <div class="mt-3 flex items-center justify-between">
                                         <div class="inline-flex items-center rounded-xl border border-teal-200 overflow-hidden">
-                                            <button wire:click="decreaseItem({{ $item['product_id'] }})" class="px-3 py-1.5 hover:bg-teal-50">−</button>
+                                            <button wire:click="decreaseItem('{{ $cart_key }}')" class="px-3 py-1.5 hover:bg-teal-50">-</button>
                                             <span class="px-4 py-1.5 min-w-8 text-center font-medium">{{ $item['quantity'] }}</span>
-                                            <button wire:click="increaseItem({{ $item['product_id'] }})" class="px-3 py-1.5 hover:bg-teal-50">+</button>
+                                            <button wire:click="increaseItem('{{ $cart_key }}')" class="px-3 py-1.5 hover:bg-teal-50">+</button>
                                         </div>
                                         <div class="text-right">
                                             <div class="text-xs text-gray-500">Total</div>

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 use App\Livewire\HomePage;
 use App\Livewire\CategoriesPage;
 use App\Livewire\ProductsPage;
@@ -21,6 +22,14 @@ use App\Livewire\Auth\RegisterPage;
 use App\Livewire\Auth\ForgotPasswordPage;
 use App\Livewire\Auth\ResetPasswordPage;
 use App\Livewire\Auth\MyAccountPage;
+
+Route::get('/storage-serve/{path}', function (string $path) {
+    $path = str_replace('%2F', '/', $path);
+    if (! Storage::disk('public')->exists($path)) {
+        abort(404);
+    }
+    return response()->file(storage_path('app/public/' . $path));
+})->where('path', '.*')->name('storage.serve');
 
 // --- Public (with rate limit) ---
 Route::middleware('throttle:300,1')->group(function () {

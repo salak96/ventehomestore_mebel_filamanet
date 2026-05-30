@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\OrderItem;
+use App\Models\ProductVariant;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -21,22 +22,21 @@ class Product extends Model
         'brand_id',
         'name',
         'slug',
+        'sku',
         'images',
         'description',
         'price',
+        'stock',
         'is_active',
         'is_featured',
-        'in_stock',
         'on_sale',
         'access_link',
         'access_username',
         'access_password',
     ];
 
-    protected $casts = [
-        'images' => 'array'
-    ];
-    
+    protected $casts = [];
+
     public function category()
     {
         return $this->belongsTo(Category::class);
@@ -51,23 +51,42 @@ class Product extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
+
+    public function variants()
+    {
+        return $this->hasMany(ProductVariant::class);
+    }
+
     public function getImagesAttribute($value)
-{
-    if (is_array($value)) {
-        return $value;
+    {
+        $decoded = $value;
+
+        while (is_string($decoded) && strlen($decoded) > 0) {
+            $next = json_decode($decoded, true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                $decoded = $next;
+                if (is_array($decoded)) break;
+            } else {
+                break;
+            }
+        }
+
+        if (is_array($decoded)) {
+            return array_values(array_map(fn ($v) => str_replace('\\', '/', (string) $v), $decoded));
+        }
+
+        return [];
     }
 
-    // kalau JSON valid
-    $decoded = json_decode($value, true);
-    if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
-        return $decoded;
+    public function setImagesAttribute($value)
+    {
+        if (is_array($value)) {
+            $normalized = array_values(array_filter(
+                array_map(fn ($v) => str_replace('\\', '/', trim((string) $v)), $value)
+            ));
+            $this->attributes['images'] = json_encode($normalized, JSON_UNESCAPED_SLASHES);
+        } elseif (is_null($value) || $value === '') {
+            $this->attributes['images'] = null;
+        }
     }
-
-    // fallback: pisah pakai koma dan kembalikan array
-    if (is_string($value) && strlen($value) > 0) {
-        return array_filter(array_map('trim', explode(',', $value)));
-    }
-
-    return [];
-}
 }

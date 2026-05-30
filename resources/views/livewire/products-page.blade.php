@@ -202,7 +202,7 @@
                                 <!-- Image -->
                                 @php
                                   $img = is_array($product->images ?? null) && !empty($product->images) ? $product->images[0] : null;
-                                  $imgUrl = $img ? url('storage', $img) : asset('images/default.png');
+                                  $imgUrl = $img ? storage_url($img) : asset('images/default.png');
                                 @endphp
                                 <a href="/products/{{ $product->slug }}" wire:navigate class="block bg-gray-50">
                                     <div class="aspect-[4/3] overflow-hidden">

@@ -106,11 +106,11 @@
                         RINGKASAN KERANJANG
                     </div>
                     <ul class="divide-y divide-gray-200 dark:divide-gray-700">
-                        @foreach ($cart_items as $item)
-                            <li class="py-3 sm:py-4" wire:key="{{ $item['product_id'] }}">
+                        @foreach ($cart_items as $cart_key => $item)
+                            <li class="py-3 sm:py-4" wire:key="{{ $cart_key }}">
                                 <div class="flex items-center">
                                     <div class="flex-shrink-0">
-                                        <img src="{{ url('storage', $item['image']) }}" alt="{{ $item['name'] }}"
+                                        <img src="{{ storage_url($item['image']) }}" alt="{{ $item['name'] }}"
                                             class="w-12 h-12 rounded-full">
                                     </div>
                                     <div class="flex-1 min-w-0 ms-4">
