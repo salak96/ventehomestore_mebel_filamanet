@@ -83,9 +83,29 @@
               <h1 class="max-w-xl mb-3 text-2xl md:text-4xl font-bold text-gray-900 dark:text-gray-100">
                 {{ $products->name }}
               </h1>
-              <p class="inline-block mb-4 text-3xl md:text-4xl font-bold text-emerald-700">
-                {{ $rupiah($currentPrice) }}
-              </p>
+
+              @php
+                $hasDiscount = !empty($products->compare_at_price) && (float) $products->compare_at_price > (float) $currentPrice;
+              @endphp
+
+              @if($hasDiscount)
+                <div class="flex items-baseline gap-3 mb-4 flex-wrap">
+                  <span class="text-lg md:text-xl line-through text-gray-400">
+                    {{ $rupiah($products->compare_at_price) }}
+                  </span>
+                  <span class="text-3xl md:text-4xl font-bold text-emerald-700">
+                    {{ $rupiah($currentPrice) }}
+                  </span>
+                  <span class="text-base md:text-lg text-gray-500 font-medium">/pcs</span>
+                </div>
+              @else
+                <div class="flex items-baseline gap-2 mb-4">
+                  <span class="inline-block text-3xl md:text-4xl font-bold text-emerald-700">
+                    {{ $rupiah($currentPrice) }}
+                  </span>
+                  <span class="text-base md:text-lg text-gray-500 font-medium">/pcs</span>
+                </div>
+              @endif
             </div>
 
             @if($products->variants && $products->variants->count() > 0)
@@ -177,13 +197,50 @@
 
       {{-- Deskripsi Produk --}}
       <div class="mt-12 border-t border-gray-200 dark:border-gray-700 pt-8">
-        <h2 class="text-2xl md:text-3xl font-bold text-center text-gray-900 dark:text-gray-100 mb-6">
+        <h2 class="text-2xl md:text-3xl font-bold text-left text-gray-900 dark:text-gray-100 mb-6">
           Deskripsi Produk
         </h2>
-        <div class="prose prose-sm md:prose-base dark:prose-invert max-w-3xl mx-auto text-center text-gray-700 dark:text-gray-300">
+        <div class="prose prose-sm md:prose-base dark:prose-invert max-w-none text-left text-gray-700 dark:text-gray-300">
           {!! Str::markdown($products->description) !!}
         </div>
       </div>
+
+      {{-- Produk Terkait --}}
+      @if(isset($related) && $related->count() > 0)
+      <div class="mt-16 border-t border-gray-200 dark:border-gray-700 pt-8">
+        <h2 class="text-2xl md:text-3xl font-bold text-left text-gray-900 dark:text-gray-100 mb-6">
+          Produk Serupa
+        </h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+          @foreach($related as $item)
+            @php
+              $rImg = is_array($item->images) && !empty($item->images) ? $item->images[0] : null;
+              $rImgUrl = $rImg ? storage_url($rImg) : asset('images/default.png');
+              $rHasDiscount = !empty($item->compare_at_price) && (float) $item->compare_at_price > (float) $item->price;
+            @endphp
+            <a href="/products/{{ $item->slug }}" wire:navigate
+               class="group bg-white border border-teal-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all dark:bg-gray-900 dark:border-gray-800">
+              <div class="aspect-[4/3] overflow-hidden">
+                <img src="{{ $rImgUrl }}" alt="{{ $item->name }}"
+                     class="w-full h-full object-cover transform transition-transform duration-300 group-hover:scale-[1.03]"
+                     onerror="this.src='{{ asset('images/default.png') }}';">
+              </div>
+              <div class="p-3 md:p-4">
+                <h3 class="text-sm md:text-base font-semibold text-gray-800 dark:text-gray-200 line-clamp-2 mb-2">
+                  {{ $item->name }}
+                </h3>
+                @if($rHasDiscount)
+                  <div class="text-xs text-gray-400 line-through">{{ $rupiah($item->compare_at_price) }}</div>
+                @endif
+                <div class="text-base md:text-lg font-bold text-emerald-700">
+                  {{ $rupiah($item->price) }}<span class="text-xs font-medium text-gray-500"> /pcs</span>
+                </div>
+              </div>
+            </a>
+          @endforeach
+        </div>
+      </div>
+      @endif
     </div>
   </section>
 </div>

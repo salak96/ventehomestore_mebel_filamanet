@@ -105,10 +105,6 @@ class ProductsPage extends Component
             $productQuery->where('on_sale', $this->onSale);
         }
 
-        if ($this->price_range) {
-            $productQuery->whereBetween('price', [0, $this->price_range]);
-        }
-
         if ($this->sort === 'latest') {
             $productQuery->latest();
         } elseif ($this->sort === 'price') {

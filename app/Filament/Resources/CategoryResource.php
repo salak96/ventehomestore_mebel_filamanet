@@ -58,7 +58,11 @@ class CategoryResource extends Resource
                     FileUpload::make('image')
                     ->image()
                     ->disk('public')
-                    ->directory('categories'),
+                    ->directory('categories')
+                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                    ->saveUploadedFileUsing(function ($file) {
+                        return \App\Helpers\ImageOptimizer::handleUploadedFile($file, 'categories', 'webp');
+                    }),
 
                     Toggle::make('is_active')
                     ->required()

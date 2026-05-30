@@ -59,6 +59,10 @@ class BrandResource extends Resource
                     ->disk('public')
                     ->directory('brands')
                     ->imagePreviewHeight('100')
+                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                    ->saveUploadedFileUsing(function ($file) {
+                        return \App\Helpers\ImageOptimizer::handleUploadedFile($file, 'brands', 'webp');
+                    })
                     ->placeholder('Upload logo brand atau biarkan kosong untuk menggunakan inisial'),
 
                     Toggle::make('is_active')

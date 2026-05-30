@@ -85,33 +85,43 @@ class ProductResource extends Resource
                             ->imageEditor()
                             ->reorderable()
                             ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
-                            ->helperText('Maksimal 4 gambar, masing-masing max 5 MB (JPG, PNG, WebP)')
+                            ->helperText('Maksimal 4 gambar, masing-masing max 5 MB. Otomatis di-compress ke WebP.')
                             ->saveUploadedFileUsing(function ($file) {
-                                $filename = \Illuminate\Support\Str::uuid() . '.' . $file->getClientOriginalExtension();
-                                $path = $file->storeAs('products', $filename, 'public');
-                                return str_replace('\\', '/', $path);
+                                return \App\Helpers\ImageOptimizer::handleUploadedFile($file, 'products', 'webp');
                             }),
                     ]),
                 ])->columnSpan(2),
 
                 Group::make()->schema([
                     Section::make('Price')->schema([
-                        // === CHANGED: input harga bertopeng (mask) ribuan ".", prefix "Rp", simpan bersih ===
                         TextInput::make('price')
-                            ->label('Harga')
+                            ->label('Harga Jual')
                             ->required()
-                            ->prefix('Rp') // ganti IDR -> Rp
+                            ->suffix('/pcs')
+                            ->prefix('Rp')
                             ->extraAttributes(['inputmode' => 'numeric'])
                             ->mask(RawJs::make(<<<'JS'
                                 $input => {
-                                    // Hanya angka lalu format ribuan titik
                                     const digits = $input.replace(/[^\d]/g, '');
                                     return digits.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
                                 }
                             JS))
-                            // Saat menyimpan ke DB, parse format Rupiah ke angka bersih
                             ->dehydrateStateUsing(fn ($state) => self::parseRupiah($state))
-                            // Saat edit (load dari DB), tampilkan dalam format ribuan titik (tanpa desimal)
+                            ->formatStateUsing(fn ($state) => $state !== null ? number_format((float) $state, 0, ',', '.') : null),
+
+                        TextInput::make('compare_at_price')
+                            ->label('Harga Sebelum Diskon')
+                            ->helperText('Isi harga asli sebelum diskon (harga ini akan dicoret di frontend). Kosongkan jika tidak ada diskon.')
+                            ->suffix('/pcs')
+                            ->prefix('Rp')
+                            ->extraAttributes(['inputmode' => 'numeric'])
+                            ->mask(RawJs::make(<<<'JS'
+                                $input => {
+                                    const digits = $input.replace(/[^\d]/g, '');
+                                    return digits.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+                                }
+                            JS))
+                            ->dehydrateStateUsing(fn ($state) => $state ? self::parseRupiah($state) : null)
                             ->formatStateUsing(fn ($state) => $state !== null ? number_format((float) $state, 0, ',', '.') : null),
                     ]),
 
@@ -170,10 +180,19 @@ class ProductResource extends Resource
 
                 // === CHANGED: tampilkan harga sebagai "Rp 1.234.567" (tanpa desimal) ===
                 TextColumn::make('price')
-                    ->label('Harga')
+                    ->label('Harga Jual')
                     ->alignRight()
                     ->sortable()
+                    ->suffix('/pcs')
                     ->formatStateUsing(fn ($state) => 'Rp ' . number_format((float) $state, 0, ',', '.')),
+
+                TextColumn::make('compare_at_price')
+                    ->label('Harga Sebelum Diskon')
+                    ->alignRight()
+                    ->sortable()
+                    ->suffix('/pcs')
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->formatStateUsing(fn ($state) => $state ? 'Rp ' . number_format((float) $state, 0, ',', '.') : '-'),
 
                 IconColumn::make('is_featured')->label('Unggulan')->boolean(),
                 IconColumn::make('on_sale')->label('Diskon')->boolean(),

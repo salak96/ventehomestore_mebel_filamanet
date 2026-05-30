@@ -116,10 +116,30 @@ class ProductDetailPage extends Component
             ? optional($product->variants->firstWhere('id', $this->selected_variant_id))->price ?? $product->price
             : $product->price;
 
+        $related = Product::where('is_active', 1)
+            ->where('id', '!=', $product->id)
+            ->where(function ($q) use ($product) {
+                $q->where('category_id', $product->category_id)
+                  ->orWhere('brand_id', $product->brand_id);
+            })
+            ->take(4)
+            ->get();
+
+        if ($related->count() < 4) {
+            $ids = $related->pluck('id')->push($product->id)->unique();
+            $more = Product::where('is_active', 1)
+                ->whereNotIn('id', $ids)
+                ->inRandomOrder()
+                ->take(4 - $related->count())
+                ->get();
+            $related = $related->concat($more);
+        }
+
         return view('livewire.product-detail-page', [
             'products'     => $product,
             'currentStock' => $currentStock,
             'currentPrice' => $currentPrice,
+            'related'      => $related,
         ]);
     }
 }

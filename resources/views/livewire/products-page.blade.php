@@ -144,29 +144,6 @@
                             </ul>
                         </div>
 
-                        <!-- Price -->
-                        <div class="p-5 bg-white border border-teal-200 rounded-2xl shadow-sm dark:bg-gray-900 dark:border-gray-800">
-                            <h3 class="text-xl font-bold text-gray-800 dark:text-gray-200">Harga</h3>
-                            <div class="mt-2 w-16 h-1 rounded bg-teal-400"></div>
-
-                            <div class="mt-5">
-                                <input
-                                    type="range"
-                                    wire:model.live.debounce.500ms="price_range"
-                                    max="5000000"
-                                    step="100000"
-                                    class="w-full h-2 bg-teal-100 rounded-lg appearance-none cursor-pointer">
-                                <div class="mt-3 flex items-center justify-between text-sm">
-                                    <span class="inline-flex items-center gap-1 font-semibold text-teal-700 bg-teal-50 px-2 py-1 rounded">
-                                        {{ $rupiah($price_range) }}
-                                    </span>
-                                    <span class="inline-flex items-center gap-1 font-semibold text-teal-700 bg-teal-50 px-2 py-1 rounded">
-                                        {{ $rupiah(5000000) }}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
                 </aside>
                 <!-- /Sidebar -->
