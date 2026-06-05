@@ -14,15 +14,19 @@ class SocialiteController extends Controller
     {
         return Socialite::driver($provider)
             ->redirectUrl(route('social.callback', ['provider' => $provider], true))
+            ->stateless()
             ->redirect();
     }
 
     public function callback($provider)
     {
         try {
+            $client = app()->environment('local') ? new Client(['verify' => false]) : new Client();
+
             $socialUser = Socialite::driver($provider)
                 ->redirectUrl(route('social.callback', ['provider' => $provider], true))
-                ->setHttpClient(new Client(['verify' => false]))
+                ->setHttpClient($client)
+                ->stateless()
                 ->user();
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error('Google login failed', [
