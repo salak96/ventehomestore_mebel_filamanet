@@ -25,7 +25,12 @@ class SocialiteController extends Controller
                 ->setHttpClient(new Client(['verify' => false]))
                 ->user();
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('Google login failed: ' . $e->getMessage());
+            \Illuminate\Support\Facades\Log::error('Google login failed', [
+                'message' => $e->getMessage(),
+                'class' => get_class($e),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
             return redirect('/login')->with('error', 'Gagal login dengan Google. Silakan coba lagi.');
         }
 
