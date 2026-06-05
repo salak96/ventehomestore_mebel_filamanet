@@ -51,6 +51,10 @@ Route::middleware(['guest', 'throttle:30,1'])->group(function () {
     Route::get('/register', RegisterPage::class)->name('register');
     Route::get('/forgot', ForgotPasswordPage::class)->name('password.request');
     Route::get('/reset/{token}', ResetPasswordPage::class)->name('password.reset');
+
+    // Google OAuth
+    Route::get('/auth/{provider}', [App\Http\Controllers\SocialiteController::class, 'redirect'])->name('social.redirect');
+    Route::get('/auth/{provider}/callback', [App\Http\Controllers\SocialiteController::class, 'callback'])->name('social.callback');
 });
 
 // --- Auth only (sudah login, with rate limit) ---

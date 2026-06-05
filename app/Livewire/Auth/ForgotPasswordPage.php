@@ -6,7 +6,7 @@ use Livewire\Component;
 use Livewire\Attributes\Title;
 use Illuminate\Support\Facades\Password;
 
-#[Title('Forgot Password')]
+#[Title('Lupa Password')]
 class ForgotPasswordPage extends Component
 {
     public $email;  
@@ -20,11 +20,12 @@ class ForgotPasswordPage extends Component
         $status = Password::sendResetLink(['email' => $this->email]);
 
         if($status === Password::RESET_LINK_SENT) {
-            session()->flash('success', 'Password direset link telah dikirim ke email Anda.');
+            session()->flash('success', 'Link reset password telah dikirim ke email Anda.');
             $this->email = '';
+        } else {
+            session()->flash('error', 'Gagal mengirim link reset. Silakan coba lagi.');
         }
     }
-
 
     public function render()
     {

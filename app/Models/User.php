@@ -28,6 +28,9 @@ class User extends Authenticatable implements FilamentUser
         'is_admin',
         'email_verified_at',
         'password',
+        'provider_name',
+        'provider_id',
+        'avatar',
     ];
 
     /**
@@ -66,5 +69,10 @@ class User extends Authenticatable implements FilamentUser
     public function isAdmin(): bool
     {
         return $this->role === 'admin';
+    }
+
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new \App\Notifications\CustomResetPassword($token));
     }
 }

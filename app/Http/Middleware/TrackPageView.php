@@ -13,7 +13,7 @@ class TrackPageView
     {
         $response = $next($request);
 
-        if ($request->isMethod('GET') && ! $request->ajax() && ! $request->is('livewire/*')) {
+        if ($request->isMethod('GET') && ! $request->ajax() && ! $request->is('livewire/*') && ! $request->is('auth/*')) {
             $lastVisit = session('last_page_view_time', 0);
             $now = time();
 
